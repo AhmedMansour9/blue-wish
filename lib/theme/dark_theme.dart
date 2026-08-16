@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-Color _primaryColor = const Color(0xFF1455AC);
-Color _secondaryColor = const Color(0xFFF58300);
+Color _primaryColor = const Color(0xFF2E7D32); // Olive Green
+Color _secondaryColor = const Color(0xFFF57C00); // Warm Orange
 
 ThemeData dark = ThemeData(
   fontFamily: 'TitilliumWeb',
@@ -24,15 +24,15 @@ ThemeData dark = ThemeData(
     primary: _primaryColor,  // Primary Color
     secondary: _secondaryColor,  // Secondary Color
     tertiary: const Color(0xFFFFBB38), // Warning Color
-    tertiaryContainer: const Color(0xFF6C7A8E),
+    tertiaryContainer: const Color(0xFF4A3B2A), // Warm orange-neutral tile/sheet tint
     surface: const Color(0xFF2D2D2D),
-    onPrimary: const Color(0xFFB7D7FE),
+    onPrimary: const Color(0xFF66BB6A), // Green tint
     onTertiaryContainer: const Color(0xFF04BB7B), // Success Color
-    primaryContainer: const Color(0xFF208458),
+    primaryContainer: const Color(0xFF1B5E20),
     onSecondaryContainer: const Color(0x912A2A2A),
     outline: const Color(0xff5C8FFC), // Info Color
     onTertiary: const Color(0xFF545252),
-    secondaryContainer: const Color(0xFFE9EEF4),
+    secondaryContainer: const Color(0xFFEFEAE2), // Warm neutral shimmer tone
     surfaceContainer: const Color(0xFFFB6C4C),
     error: const Color(0xFFFF4040), // Danger Color
     shadow: const Color(0xFFF4F7FC),
