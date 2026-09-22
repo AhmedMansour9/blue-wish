@@ -13,7 +13,7 @@ import 'package:flutter_sixvalley_ecommerce/common/enums/local_caches_type_enum.
 
   static const String baseUrl = 'https://www.blue-wiish.com/';
 
-  static const String googleServerClientId = 'client_id here';
+  static const String googleServerClientId = '804083944604-cti4kt709er7e69u1u0ifonsnogngl91.apps.googleusercontent.com';
   static const String userId = 'userId';
 
   static const String name = 'name';

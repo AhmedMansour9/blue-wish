@@ -6,11 +6,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("dev.flutter.flutter-gradle-plugin")
-    // Disabled: google-services.json still only lists the old package name
-    // (com.sixamtech.sixvalley), so this plugin fails the build for the new
-    // applicationId "com.bluewish". Re-enable once a google-services.json
-    // covering the new package is dropped into android/app/.
-    // id("com.google.gms.google-services")
+    id("com.google.gms.google-services")
 }
 
 val keystoreProperties = Properties()

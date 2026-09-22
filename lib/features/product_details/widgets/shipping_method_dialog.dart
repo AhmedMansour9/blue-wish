@@ -94,7 +94,8 @@ class _ChooseShippingMethodDialogState extends State<ChooseShippingMethodDialog>
                                               color: Theme.of(context).hintColor,),
                                             const SizedBox(width: Dimensions.paddingSizeSmall),
                                             Expanded(child: Text('${widget.shippingMethodList![index].title}'
-                                                ' (Duration ${widget.shippingMethodList![index].duration})', style: textMedium.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color)),),
+                                                // ' (Duration ${widget.shippingMethodList![index].duration})'
+                                                , style: textMedium.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color)),),
                                             const SizedBox(width: Dimensions.paddingSizeSmall),
                           
                                             Text(' ${PriceConverter.convertPrice(context, widget.shippingMethodList![index].cost)}',

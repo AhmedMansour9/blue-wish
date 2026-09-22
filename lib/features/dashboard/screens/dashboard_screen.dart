@@ -89,16 +89,18 @@ class DashBoardScreenState extends State<DashBoardScreen> {
     Provider.of<FlashDealController>(context, listen: false).getFlashDealList(true, false);
     Provider.of<SplashController>(context, listen: false).getBusinessPagesList('default');
     Provider.of<SplashController>(context, listen: false).getBusinessPagesList('pages');
+    final SplashController splashController = Provider.of<SplashController>(context, listen: false);
     if (Provider.of<AuthController>(context, listen: false).isLoggedIn()) {
       Provider.of<CartController>(context, listen: false).mergeGuestCart();
       Provider.of<WishListController>(context, listen: false).getWishList('');
       Provider.of<ChatController>(context, listen: false).getChatList(1, reload: false, userType: 0);
       Provider.of<ChatController>(context, listen: false).getChatList(1, reload: false, userType: 1);
       Provider.of<RestockController>(context, listen: false).getRestockProductList(1, getAll: true);
-      Provider.of<WalletController>(context, listen: false).getTransactionList(1, isUpdate: false);
+      if (splashController.configModel?.walletStatus == 1) {
+        Provider.of<WalletController>(context, listen: false).getTransactionList(1, isUpdate: false);
+      }
     }
 
-    final SplashController splashController = Provider.of<SplashController>(context, listen: false);
     isAuctionEnabled = splashController.configModel?.isAuctionFeatureEnabled ?? false;
     singleVendor = splashController.configModel?.businessMode == "single";
     Provider.of<SearchProductController>(context, listen: false).getAuthorList(null);
