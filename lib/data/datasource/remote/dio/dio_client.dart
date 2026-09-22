@@ -22,7 +22,10 @@ class DioClient {
         required this.sharedPreferences,
       }) {
     token = sharedPreferences.getString(AppConstants.userLoginToken);
-    countryCode = sharedPreferences.getString(AppConstants.countryCode) ?? AppConstants.languages[0].countryCode;
+    final String savedLanguageCode = sharedPreferences.getString(AppConstants.languageCode) ?? AppConstants.languages[0].languageCode!;
+    countryCode = AppConstants.languages
+        .firstWhere((language) => language.languageCode == savedLanguageCode, orElse: () => AppConstants.languages[0])
+        .apiLanguageCode ?? savedLanguageCode;
     if (kDebugMode) {
       print("NNNN $token");
     }
@@ -36,7 +39,7 @@ class DioClient {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
-        AppConstants.langKey : countryCode == 'US'? 'en': countryCode!.toLowerCase(),
+        AppConstants.langKey : countryCode!.toLowerCase(),
 
       };
     dio!.interceptors.add(loggingInterceptor);
@@ -44,13 +47,13 @@ class DioClient {
 
   void updateHeader(String? token, String? countryCode) {
     token = token ?? this.token;
-    countryCode = countryCode == null ? this.countryCode == 'US' ? 'en': this.countryCode!.toLowerCase(): countryCode == 'US' ? 'en' : countryCode.toLowerCase();
+    countryCode = (countryCode ?? this.countryCode)!.toLowerCase();
     this.token = token;
     this.countryCode = countryCode;
     dio!.options.headers = {
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer $token',
-      AppConstants.langKey: countryCode == 'US'? 'en':countryCode.toLowerCase(),
+      AppConstants.langKey: countryCode,
     };
   }
 
