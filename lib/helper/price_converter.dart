@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sixvalley_ecommerce/features/splash/controllers/splash_controller.dart';
+import 'package:flutter_sixvalley_ecommerce/localization/controllers/localization_controller.dart';
 import 'package:provider/provider.dart';
 
 class PriceConverter {
@@ -12,7 +13,8 @@ class PriceConverter {
       }
     }
     bool singleCurrency = Provider.of<SplashController>(context, listen: false).configModel!.currencyModel == 'single_currency';
-    bool inRight = Provider.of<SplashController>(context, listen: false).configModel!.currencySymbolPosition == 'right';
+    bool isArabic = !Provider.of<LocalizationController>(context, listen: false).isLtr;
+    bool inRight = isArabic || Provider.of<SplashController>(context, listen: false).configModel!.currencySymbolPosition == 'right';
 
     // return '${inRight ? '' : Provider.of<SplashController>(context, listen: false).myCurrency!.symbol}'
     //     '${(singleCurrency? price : price! * Provider.of<SplashController>(context, listen: false).myCurrency!.exchangeRate!
@@ -57,7 +59,8 @@ class PriceConverter {
 
   static String getUnitCurrency (BuildContext context, double? price) {
     bool singleCurrency = Provider.of<SplashController>(context, listen: false).configModel!.currencyModel == 'single_currency';
-    bool inRight = Provider.of<SplashController>(context, listen: false).configModel!.currencySymbolPosition == 'right';
+    bool isArabic = !Provider.of<LocalizationController>(context, listen: false).isLtr;
+    bool inRight = isArabic || Provider.of<SplashController>(context, listen: false).configModel!.currencySymbolPosition == 'right';
 
     return '${inRight ? '' : Provider.of<SplashController>(context, listen: false).myCurrency!.symbol}'
       '${(singleCurrency? price : price!)!

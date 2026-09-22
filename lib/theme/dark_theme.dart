@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sixvalley_ecommerce/theme/app_colors.dart';
 
-Color _primaryColor = const Color(0xFF2E7D32); // Olive Green
-Color _secondaryColor = const Color(0xFFF57C00); // Warm Orange
+Color _primaryColor = AppColors.primary; // Teal
+Color _secondaryColor = AppColors.accent; // Navy
 
 ThemeData dark = ThemeData(
-  fontFamily: 'TitilliumWeb',
+  fontFamily: 'IBMPlexSansArabic-Medium',
   primaryColor: _primaryColor,
   brightness: Brightness.dark,
   highlightColor: const Color(0xFF252525),
@@ -26,9 +27,9 @@ ThemeData dark = ThemeData(
     tertiary: const Color(0xFFFFBB38), // Warning Color
     tertiaryContainer: const Color(0xFF4A3B2A), // Warm orange-neutral tile/sheet tint
     surface: const Color(0xFF2D2D2D),
-    onPrimary: const Color(0xFF66BB6A), // Green tint
+    onPrimary: AppColors.lightBlue, // Light accent tint
     onTertiaryContainer: const Color(0xFF04BB7B), // Success Color
-    primaryContainer: const Color(0xFF1B5E20),
+    primaryContainer: AppColors.secondary,
     onSecondaryContainer: const Color(0x912A2A2A),
     outline: const Color(0xff5C8FFC), // Info Color
     onTertiary: const Color(0xFF545252),

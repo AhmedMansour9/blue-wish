@@ -50,6 +50,10 @@ class HomeExploreScreen extends StatefulWidget {
 }
 
 class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProviderStateMixin {
+  // Temporarily hides the "Explore" tab (flash deals/banners/featured feed) from the home tab bar.
+  // Flip back to true to restore it — the tab's code is left in place.
+  static const bool _kShowExploreTab = false;
+
   final ScrollController _scrollController = ScrollController();
   final Map<int, double> _tabScrollOffsets = {};
   bool _switchingToCategory = false;
@@ -99,7 +103,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
   }
 
   void _onScroll() {
-    final bool onExploreTab = _tabController == null || _tabController!.index == 0;
+    final bool onExploreTab = _kShowExploreTab && (_tabController == null || _tabController!.index == 0);
     if (!onExploreTab) return;
 
     final ctx = _buttonsTabBarKey.currentContext;
@@ -138,9 +142,10 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
   }
 
   int _scrollKeyForTab(int tabIndex) {
-    if (tabIndex == 0) return -1;
+    if (_kShowExploreTab && tabIndex == 0) return -1;
     final categories = Provider.of<CategoryController>(context, listen: false).categoryList;
-    return categories[tabIndex - 1].id ?? -1;
+    final categoryIndex = _kShowExploreTab ? tabIndex - 1 : tabIndex;
+    return categories[categoryIndex].id ?? -1;
   }
 
   Future<void> _refreshData() async {
@@ -175,7 +180,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
 
   void _initTabs() {
     final categories = Provider.of<CategoryController>(context, listen: false).categoryList;
-    final tabCount = 1 + categories.length;
+    final tabCount = _kShowExploreTab ? 1 + categories.length : categories.length;
 
     if (_tabController == null || _tabController!.length != tabCount) {
       _tabController?.dispose();
@@ -234,13 +239,13 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
       child: Consumer<CategoryController>(
         builder: (context, categoryController, _) {
           final categories = categoryController.categoryList;
-          final expectedLength = 1 + categories.length;
+          final expectedLength = _kShowExploreTab ? 1 + categories.length : categories.length;
 
           if (_tabController == null || _tabController!.length != expectedLength) {
             WidgetsBinding.instance.addPostFrameCallback((_) => _initTabs());
           }
 
-          final bool onExploreTab = _tabController == null || _tabController!.index == 0;
+          final bool onExploreTab = _kShowExploreTab && (_tabController == null || _tabController!.index == 0);
           final double revealT = onExploreTab ? _tabBarRevealAnim.value : 1.0;
 
           return Container(
@@ -357,12 +362,12 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                                       labelStyle: titilliumSemiBold.copyWith(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
-                                          fontSize: Dimensions.fontSizeSmall),
+                                          fontSize: Dimensions.fontSizeSmall + 5),
                                       unselectedLabelStyle: titilliumRegular.copyWith(
                                           color: Colors.white,
-                                          fontSize: Dimensions.fontSizeSmall),
+                                          fontSize: Dimensions.fontSizeSmall + 5),
                                       tabs: [
-                                        Tab(text: getTranslated('explore', context)!),
+                                        if (_kShowExploreTab) Tab(text: getTranslated('explore', context)!),
                                         ...categories.map((c) => Tab(text: getTranslated(c.name, context) ?? c.name ?? ''),
                                         ),
                                       ],
@@ -428,7 +433,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                     ) : _switchingToCategory ? const CategoryContentScreenShimmer() : TabBarView(
                       controller: _tabController,
                       children: [
-                        const SizedBox(),
+                        if (_kShowExploreTab) const SizedBox(),
                         ...categories.asMap().entries.map((entry) => HomeCategoryContent(categoryName: entry.value.name ?? '', categoryIndex: entry.key),
                         ),
                       ],

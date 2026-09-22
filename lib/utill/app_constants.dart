@@ -3,7 +3,7 @@ import 'package:flutter_sixvalley_ecommerce/common/enums/local_caches_type_enum.
   import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
 
   class AppConstants {
-  static const String appName = '6valley';
+  static const String appName = 'Blue Wish';
   static const String slogan = 'E-Commerce Marketplace';
   static const String appVersion = '16.3'; ///Flutter SDK 3.44.2
   static const bool demo = false;

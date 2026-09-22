@@ -16,6 +16,7 @@ import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/no_internet_screen_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/theme/app_colors.dart';
 import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -309,7 +310,7 @@ class SplashWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: Theme.of(context).primaryColor,
+      color: AppColors.background,
       child: Column(mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -319,10 +320,10 @@ class SplashWidget extends StatelessWidget {
           duration: const Duration(milliseconds: 2000), lift: 50, ratio: 0.5, pause: 0.25,
           child: SizedBox(width: 150, child: Image.asset(Images.logo, width: 150.0))
         ),
-        Text(AppConstants.appName,style: textRegular.copyWith(fontSize: Dimensions.fontSizeOverLarge, color: Colors.white)),
+        Text(AppConstants.appName,style: textRegular.copyWith(fontSize: Dimensions.fontSizeOverLarge, color: AppColors.primary)),
         Padding(
           padding: const EdgeInsets.only(top: Dimensions.paddingSizeSmall),
-          child: Text(AppConstants.slogan,style: textRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Colors.white))
+          child: Text(AppConstants.slogan,style: textRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: AppColors.textSecondary))
         )
       ]),
     );

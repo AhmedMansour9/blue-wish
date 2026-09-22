@@ -84,7 +84,7 @@ class ClearanceTitleRowWidget extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: robotoBold.copyWith(
-                    fontSize: Dimensions.fontSizeLarge ,
+                    fontSize: Dimensions.fontSizeLarge,
                     color: titleColor ?? (Theme.of(context).highlightColor),
                   )
               ),

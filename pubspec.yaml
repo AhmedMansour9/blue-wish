@@ -122,3 +122,15 @@ flutter:
           weight: 500
         - asset: assets/fonts/ubuntu/SF-Pro-Rounded-Regular.ttf
           weight: 600
+    - family: IBMPlexSansArabic-Medium
+      fonts:
+        - asset: assets/fonts/ubuntu/IBMPlexSansArabic-Medium.ttf
+          weight: 300
+        - asset: assets/fonts/ubuntu/IBMPlexSansArabic-Medium.ttf
+          weight: 400
+        - asset: assets/fonts/ubuntu/IBMPlexSansArabic-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/ubuntu/IBMPlexSansArabic-Medium.ttf
+          weight: 600
+        - asset: assets/fonts/ubuntu/IBMPlexSansArabic-Medium.ttf
+          weight: 700
