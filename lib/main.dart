@@ -89,23 +89,31 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if(Firebase.apps.isEmpty) {
-    if(Platform.isAndroid) {
-      try{
-        /// todo you need to configure that firebase Option with your own firebase to run your app
-        await Firebase.initializeApp(
-          name: 'your_project_name',
-          options: const FirebaseOptions(
-              apiKey: "current_key here",
-              projectId: "project_id here",
-              messagingSenderId: "project_number here",
-              appId: "mobilesdk_app_id here"
-          )
-        );
-      } finally {
+    try {
+      if(Platform.isAndroid) {
+        try{
+          /// todo you need to configure that firebase Option with your own firebase to run your app
+          await Firebase.initializeApp(
+            name: 'your_project_name',
+            options: const FirebaseOptions(
+                apiKey: "current_key here",
+                projectId: "project_id here",
+                messagingSenderId: "project_number here",
+                appId: "mobilesdk_app_id here"
+            )
+          );
+        } finally {
+          await Firebase.initializeApp();
+        }
+      }else{
         await Firebase.initializeApp();
       }
-    }else{
-      await Firebase.initializeApp();
+    } catch (e) {
+      // google-services.json / GoogleService-Info.plist don't cover the current
+      // applicationId/bundle id yet, so Firebase can't initialize. Continue
+      // without it rather than crashing the app on startup; push notifications
+      // and any Firebase-backed features stay disabled until that's fixed.
+      debugPrint('Firebase init skipped: $e');
     }
   }
 

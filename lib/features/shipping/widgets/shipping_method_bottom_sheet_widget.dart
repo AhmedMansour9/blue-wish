@@ -19,6 +19,9 @@ class ShippingMethodBottomSheetWidget extends StatefulWidget {
 }
 
 class ShippingMethodBottomSheetWidgetState extends State<ShippingMethodBottomSheetWidget> {
+  // Temporarily hides the shipping method description line. Flip back to true to restore it.
+  static const bool _kShowDuration = false;
+
   int selectedIndex = 0;
   @override
   void initState() {
@@ -110,9 +113,20 @@ class ShippingMethodBottomSheetWidgetState extends State<ShippingMethodBottomShe
                                   Icon(Icons.radio_button_checked, color: Theme.of(context).primaryColor): Icon(Icons.circle_outlined,
                                     color: Theme.of(context).colorScheme.tertiaryContainer),
                                   const SizedBox(width: Dimensions.paddingSizeSmall),
-                                  Expanded(child: Text('${shippingController.shippingList![widget.sellerIndex].shippingMethodList![index].title}'
-                                      ' (Duration ${shippingController.shippingList![widget.sellerIndex].shippingMethodList![index].duration})',
-                                    style: textRegular.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
+                                  Expanded(child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('${shippingController.shippingList![widget.sellerIndex].shippingMethodList![index].title}',
+                                        style: textBold.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
+                                      ),
+                                      if(_kShowDuration && (shippingController.shippingList![widget.sellerIndex].shippingMethodList![index].duration ?? '').isNotEmpty)
+                                        Padding(
+                                          padding: const EdgeInsets.only(top: Dimensions.paddingSizeExtraSmall),
+                                          child: Text('${shippingController.shippingList![widget.sellerIndex].shippingMethodList![index].duration}',
+                                            style: textRegular.copyWith(color: Theme.of(context).hintColor, fontSize: Dimensions.fontSizeSmall),
+                                          ),
+                                        ),
+                                    ],
                                   ),
                                   ),
                                   const SizedBox(width: Dimensions.paddingSizeSmall),

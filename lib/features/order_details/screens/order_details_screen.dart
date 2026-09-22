@@ -492,7 +492,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
 
 
-                          SellerSectionWidget(order: orderProvider),
+                          if(Provider.of<SplashController>(context, listen: false).configModel?.businessMode != 'single')
+                            SellerSectionWidget(order: orderProvider),
 
 
                           if(orderProvider.orders != null)

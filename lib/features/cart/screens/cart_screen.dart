@@ -581,6 +581,12 @@ class CartScreenState extends State<CartScreen> {
                                                             ),
                                                           ),
 
+                                                          singleVendor ?
+                                                          Flexible(child: Text(getTranslated('all', context)!, maxLines: 1, overflow: TextOverflow.ellipsis,
+                                                            textAlign: TextAlign.start, style: textBold.copyWith(fontWeight: FontWeight.w500, fontSize: Dimensions.fontSizeLarge,
+                                                              color: Provider.of<ThemeController>(context, listen: false).darkTheme?
+                                                              Theme.of(context).hintColor : Theme.of(context).textTheme.bodyLarge?.color)
+                                                          )) :
                                                           Flexible(child: InkWell(
                                                             onTap: () => _storeScreenRouteCall(sellerGroupList[index]),
                                                             child: Text(sellerGroupList[index].shopInfo!, maxLines: 1, overflow: TextOverflow.ellipsis,
@@ -844,25 +850,33 @@ class CartScreenState extends State<CartScreen> {
                                       child: Padding(padding: const EdgeInsets.all(8.0),
                                         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
 
-                                          Row(children: [
-                                            SizedBox(width: 15,height: 15, child: Image.asset(Images.delivery, color: Theme.of(context).textTheme.bodyLarge?.color)),
-                                            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                                            Text(getTranslated('choose_shipping_method', context)!,
-                                              style: textRegular.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: Dimensions.fontSizeSmall), overflow: TextOverflow.ellipsis, maxLines: 1
-                                            )
-                                          ]),
+                                          Flexible(
+                                            child: Row(children: [
+                                              SizedBox(width: 15,height: 15, child: Image.asset(Images.delivery, color: Theme.of(context).textTheme.bodyLarge?.color)),
+                                              const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                                              Flexible(
+                                                child: Text(getTranslated('choose_shipping_method', context)!,
+                                                  style: textRegular.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: Dimensions.fontSizeSmall), overflow: TextOverflow.ellipsis, maxLines: 1
+                                                ),
+                                              ),
+                                            ]),
+                                          ),
                                           SizedBox(height: Dimensions.paddingSizeDefault),
 
-                                          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                                            Text((shippingController.shippingList == null ||shippingController.chosenShippingList.isEmpty ||
-                                                shippingController.shippingList!.isEmpty || shippingController.shippingList![0].shippingMethodList == null ||
-                                                shippingController.shippingList![0].shippingIndex == -1) ? ''
-                                                : shippingController.shippingList![0].shippingMethodList![shippingController.shippingList![0].shippingIndex!].title.toString(),
-                                              style: titilliumSemiBold.copyWith(color: Theme.of(context).hintColor),
-                                              maxLines: 1, overflow: TextOverflow.ellipsis,),
-                                            const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                                            Icon(Icons.keyboard_arrow_down, color: Theme.of(context).primaryColor),
-                                          ]),
+                                          Flexible(
+                                            child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                                              Flexible(
+                                                child: Text((shippingController.shippingList == null ||shippingController.chosenShippingList.isEmpty ||
+                                                    shippingController.shippingList!.isEmpty || shippingController.shippingList![0].shippingMethodList == null ||
+                                                    shippingController.shippingList![0].shippingIndex == -1) ? ''
+                                                    : shippingController.shippingList![0].shippingMethodList![shippingController.shippingList![0].shippingIndex!].title.toString(),
+                                                  style: titilliumSemiBold.copyWith(color: Theme.of(context).hintColor),
+                                                  maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.end,),
+                                              ),
+                                              const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                                              Icon(Icons.keyboard_arrow_down, color: Theme.of(context).primaryColor),
+                                            ]),
+                                          ),
 
 
 

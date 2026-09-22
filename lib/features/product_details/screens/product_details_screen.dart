@@ -260,7 +260,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ) : const SizedBox(),
 
 
-                      (details.productDetailsModel != null) ?
+                      (details.productDetailsModel != null && Provider.of<SplashController>(context, listen: false).configModel?.businessMode != 'single') ?
                       ShopInfoWidget(sellerId: details.productDetailsModel!.addedBy == 'seller'? details.productDetailsModel!.seller!.shop!.slug!.toString()
                         : Provider.of<SplashController>(context, listen: false).configModel!.inHouseShop!.slug!
                       ) : const SizedBox.shrink(),
@@ -333,7 +333,8 @@ class _ProductDetailsProductListWidget extends StatelessWidget {
             Consumer<SellerProductController>(
               builder: (context, sellerProductController, _) {
                 return (sellerProductController.sellerMoreProduct != null && sellerProductController.sellerMoreProduct!.products != null &&
-                    sellerProductController.sellerMoreProduct!.products!.isNotEmpty)?
+                    sellerProductController.sellerMoreProduct!.products!.isNotEmpty &&
+                    Provider.of<SplashController>(context, listen: false).configModel?.businessMode != 'single')?
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical : Dimensions.paddingSizeDefault),
                   child: TitleRowWidget(title: getTranslated('more_from_the_shop', context),
