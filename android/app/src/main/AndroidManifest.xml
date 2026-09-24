@@ -42,7 +42,7 @@
         android:allowBackup="false"
         android:fullBackupContent="false">
 
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="YOUR_MAP_KEY_HERE" />
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyAYG5r1YDTzXL-_HTLaBUmngS15zUs4zdU" />
 
         <activity
             android:name=".MainActivity"
