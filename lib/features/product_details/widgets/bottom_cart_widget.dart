@@ -108,16 +108,27 @@ class _BottomCartWidgetState extends State<BottomCartWidget> {
                 },)
               );
             }},
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraSmall),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-              color: Theme.of(context).primaryColor),
-            child: Text(getTranslated('add_to_cart', context)!,
-              style: titilliumSemiBold.copyWith(fontSize: Dimensions.fontSizeLarge,
-                  color: Provider.of<ThemeController>(context, listen: false).darkTheme?
-                  Theme.of(context).hintColor : Theme.of(context).highlightColor),),
-          ),
+          child: Consumer<CartController>(builder: (context, cartController, child) {
+            final bool isInCart = cartController.cartList.any((item) => item.productId == widget.product?.id);
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraSmall),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                color: Theme.of(context).primaryColor),
+              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                if(isInCart) ...[
+                  Icon(Icons.check_circle, size: Dimensions.fontSizeLarge,
+                    color: Provider.of<ThemeController>(context, listen: false).darkTheme?
+                    Theme.of(context).hintColor : Theme.of(context).highlightColor),
+                  const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                ],
+                Text(getTranslated(isInCart ? 'update_cart' : 'add_to_cart', context)!,
+                  style: titilliumSemiBold.copyWith(fontSize: Dimensions.fontSizeLarge,
+                      color: Provider.of<ThemeController>(context, listen: false).darkTheme?
+                      Theme.of(context).hintColor : Theme.of(context).highlightColor),),
+              ]),
+            );
+          }),
         )),
       ]),
 

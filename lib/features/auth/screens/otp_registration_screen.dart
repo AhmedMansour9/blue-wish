@@ -97,14 +97,6 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
                           height: ResponsiveHelper.isDesktop(context) ? size.height * 0.05 : size.height * 0.14,
                         ),
 
-                        const Directionality(
-                          textDirection: TextDirection.ltr,
-                          child: CustomAssetImageWidget(
-                            Images.logoWithNameImage, width: 150, height: 140, fit: BoxFit.scaleDown,
-                          ),
-                        ),
-                        const SizedBox(height: 30),
-
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraLarge),
                           child: Center(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sixvalley_ecommerce/common/basewidget/add_to_cart_button_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/discount_tag_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product/domain/models/product_model.dart';
 import 'package:flutter_sixvalley_ecommerce/features/shop/domain/models/shop_navigation_model.dart';
@@ -151,6 +152,11 @@ class ProductWidget extends StatelessWidget {
                   Theme.of(context).textTheme.bodyLarge?.color :
                   Theme.of(context).primaryColor,fontSize: Dimensions.fontSizeDefault),
                 ),
+
+                if (!(productModel.currentStock! == 0 && productModel.productType == 'physical')) ...[
+                  const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                  AddToCartButtonWidget(product: productModel),
+                ],
 
               ]),
             ),

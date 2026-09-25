@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sixvalley_ecommerce/common/basewidget/add_to_cart_button_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_asset_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product/domain/models/product_model.dart';
@@ -220,6 +221,10 @@ class ProductCardWidget extends StatelessWidget {
                           ),
                         ],
                       ),
+                    if (!(product.currentStock == 0 && product.productType == 'physical')) ...[
+                      const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                      AddToCartButtonWidget(product: product),
+                    ],
                   ],
                 ),
               ],
