@@ -13,6 +13,7 @@ class Images {
   static const String shoppingImage = 'assets/images/order.png';
   static const String wishImage = 'assets/images/wish.png';
   static const String background = 'assets/images/background.jpg';
+  static const String imgHeader = 'assets/images/img_header.png';
   static const String couponBannerImage = 'assets/images/coupon_banner.png';
   static const String chatImage = 'assets/images/chat.png';
   static const String refundReason = 'assets/images/reason.png';

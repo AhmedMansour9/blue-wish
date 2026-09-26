@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/buttons_tab_bar.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/category_content_screen_shimmer.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_sixvalley_ecommerce/features/auction_home/domain/auction
 import 'package:flutter_sixvalley_ecommerce/features/auth/controllers/auth_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/features/banner/controllers/banner_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/features/category/controllers/category_controller.dart';
+import 'package:flutter_sixvalley_ecommerce/features/category/domain/models/category_model.dart';
 import 'package:flutter_sixvalley_ecommerce/features/clearance_sale/widgets/clearance_sale_list_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/deal/controllers/flash_deal_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/home_category_content.dart';
@@ -68,7 +70,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
   final GlobalKey _buttonsTabBarKey = GlobalKey();
   final GlobalKey _nestedKey = GlobalKey();
   bool _buttonsTabPinned = false;
-  static const double _categoryTabBarHeight = 48;
+  static const double _categoryTabBarHeight = 106;
   static const double _searchBarHeight = 75;
 
   late final AnimationController _tabBarRevealAnim;
@@ -228,7 +230,13 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
 
   @override
   Widget build(BuildContext context) {
-    return BackButtonListener(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+      child: BackButtonListener(
       onBackButtonPressed: () async {
         if (_tabController != null && _tabController!.index != 0) {
           _tabController!.animateTo(0);
@@ -251,6 +259,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
           return Container(
             color: Color.lerp(Theme.of(context).cardColor, Theme.of(context).primaryColor, revealT),
             child: SafeArea(
+              top: false,
               bottom: false,
               child: Scaffold(
                 body: RefreshIndicator(
@@ -272,61 +281,115 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                           centerTitle: false,
                           automaticallyImplyLeading: false,
                           backgroundColor: Theme.of(context).primaryColor,
-                          expandedHeight: 65,
+                          expandedHeight: 123,
                           flexibleSpace: _CustomizableSpaceBarWidget(
                             builder: (ctx, scrollingRate, child) => Opacity(
                               opacity: (1 - scrollingRate).clamp(0.0, 1.0),
                               child: child,
                             ),
-                            child: SafeArea(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: Dimensions.homePagePadding, vertical: Dimensions.paddingSizeSmall),
-                                child: Consumer<ProfileController>(
-                                  builder: (context, profileController, _) {
-                                    final bool isLoggedIn = Provider.of<AuthController>(context, listen: false).isLoggedIn();
-                                    final String firstLine = isLoggedIn
-                                        ? getTranslated('hello_welcome', context)!
-                                        : getTranslated('hello', context)!;
-                                    final String secondLine = isLoggedIn
-                                        ? (profileController.userInfoModel?.fName ?? '')
-                                        : getTranslated('welcome', context)!;
-                                    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min,
+                            child: Container(
+                              width: double.infinity,
+                              height: double.infinity,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(Images.imgHeader),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              child: Stack(
+                                clipBehavior: Clip.hardEdge,
+                                children: [
+                                  Positioned.fill(
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                          colors: [
+                                            Colors.black.withValues(alpha: 0.30),
+                                            Colors.black.withValues(alpha: 0.05),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SafeArea(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: Dimensions.homePagePadding, vertical: Dimensions.paddingSizeSmall),
+                                      child: Consumer<ProfileController>(
+                                        builder: (context, profileController, _) {
+                                          final bool isLoggedIn = Provider.of<AuthController>(context, listen: false).isLoggedIn();
+                                          final String firstLine = isLoggedIn
+                                              ? getTranslated('hello_welcome', context)!
+                                              : getTranslated('hello', context)!;
+                                          final String secondLine = isLoggedIn
+                                              ? (profileController.userInfoModel?.fName ?? '')
+                                              : getTranslated('welcome', context)!;
+                                          return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
-                                              Text(
-                                                firstLine,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: titilliumRegular.copyWith(
-                                                  color: Colors.white,
-                                                  fontSize: Dimensions.fontSizeDefault,
+                                              Expanded(
+                                                child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Text(
+                                                      firstLine,
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: titilliumRegular.copyWith(
+                                                        color: Colors.white.withValues(alpha: 0.85),
+                                                        fontSize: Dimensions.fontSizeSmall + 1,
+                                                        letterSpacing: 0.2,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 2),
+                                                    Text(secondLine,
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: titilliumBold.copyWith(
+                                                        color: Colors.white,
+                                                        fontSize: Dimensions.fontSizeOverLarge,
+                                                        height: 1.1,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                              Text(secondLine,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: titilliumBold.copyWith(
-                                                  color: Colors.white,
-                                                  fontSize: Dimensions.fontSizeLarge,
+                                              GestureDetector(
+                                                onTap: () => RouterHelper.getMoreScreenRoute(action: RouteAction.push),
+                                                child: Container(
+                                                  padding: const EdgeInsets.all(2.5),
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    border: Border.all(color: Colors.white.withValues(alpha: 0.8), width: 1.5),
+                                                    boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.15), blurRadius: 10, offset: const Offset(0, 3))],
+                                                  ),
+                                                  child: ClipOval(
+                                                    child: CustomImageWidget(
+                                                        image: profileController.userInfoModel?.imageFullUrl?.path ?? '',
+                                                        width: 42, height: 42, placeholder: Images.guestProfile),
+                                                  ),
                                                 ),
                                               ),
                                             ],
-                                          ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    left: 0, right: 0, bottom: 0,
+                                    child: Container(
+                                      height: 10,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).scaffoldBackgroundColor,
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(12),
+                                          topRight: Radius.circular(12),
                                         ),
-                                        GestureDetector(
-                                          onTap: () => RouterHelper.getMoreScreenRoute(action: RouteAction.push),
-                                          child: ClipOval(
-                                            child: CustomImageWidget(
-                                                image: profileController.userInfoModel?.imageFullUrl?.path ?? '',
-                                                width: 40, height: 40, placeholder: Images.guestProfile),
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -336,13 +399,15 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                           handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                           sliver: SliverAppBar(
                             elevation: 0,
-                            backgroundColor: Theme.of(context).primaryColor,
+                            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                             automaticallyImplyLeading: false,
+                            primary: false,
                             pinned: true,
                             floating: true,
+                            toolbarHeight: 0,
                             expandedHeight: 0,
-                            surfaceTintColor: Theme.of(context).primaryColor,
-                            foregroundColor: Theme.of(context).primaryColor,
+                            surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+                            foregroundColor: Theme.of(context).scaffoldBackgroundColor,
                             forceElevated: innerBoxIsScrolled,
                             bottom: PreferredSize(
                               preferredSize: Size.fromHeight(_categoryTabBarHeight * revealT),
@@ -353,25 +418,25 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                                   child: Opacity(
                                     opacity: revealT,
                                     child: (_tabController != null && _tabController!.length == expectedLength)
-                                        ? TabBar(
-                                      controller: _tabController,
-                                      isScrollable: true,
-                                      tabAlignment: TabAlignment.start,
-                                      dividerColor: Colors.transparent,
-                                      indicatorColor: Theme.of(context).colorScheme.secondary,
-                                      labelStyle: titilliumSemiBold.copyWith(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: Dimensions.fontSizeSmall + 5),
-                                      unselectedLabelStyle: titilliumRegular.copyWith(
-                                          color: Colors.white,
-                                          fontSize: Dimensions.fontSizeSmall + 5),
-                                      tabs: [
-                                        if (_kShowExploreTab) Tab(text: getTranslated('explore', context)!),
-                                        ...categories.map((c) => Tab(text: getTranslated(c.name, context) ?? c.name ?? ''),
-                                        ),
-                                      ],
-                                    ) : const SizedBox(height: _categoryTabBarHeight),
+                                        ? Container(
+                                      color: Theme.of(context).scaffoldBackgroundColor,
+                                      child: TabBar(
+                                        controller: _tabController,
+                                        isScrollable: true,
+                                        tabAlignment: TabAlignment.start,
+                                        dividerColor: Colors.transparent,
+                                        indicatorColor: Colors.transparent,
+                                        labelPadding: EdgeInsets.zero,
+                                        tabs: [
+                                          if (_kShowExploreTab) Tab(text: getTranslated('explore', context)!),
+                                          ...categories.asMap().entries.map((entry) => _CategoryTabCard(
+                                            category: entry.value,
+                                            index: _kShowExploreTab ? entry.key + 1 : entry.key,
+                                            controller: _tabController!,
+                                          )),
+                                        ],
+                                      ),
+                                    ) : SizedBox(height: _categoryTabBarHeight),
                                   ),
                                 ),
                               ),
@@ -446,6 +511,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
             ),
           );
         },
+      ),
       ),
     );
   }
@@ -523,6 +589,63 @@ class _CustomizableSpaceBarWidget extends StatelessWidget {
         final deltaExtent = settings.maxExtent - settings.minExtent;
         final scrollingRate = (1.0 - (settings.currentExtent - settings.minExtent) / deltaExtent).clamp(0.0, 1.0);
         return builder(context, scrollingRate, child);
+      },
+    );
+  }
+}
+
+class _CategoryTabCard extends StatelessWidget {
+  final CategoryModel category;
+  final int index;
+  final TabController controller;
+
+  const _CategoryTabCard({required this.category, required this.index, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: controller.animation ?? controller,
+      builder: (context, _) {
+        final bool isSelected = controller.index == index;
+        return Container(
+          width: 78,
+          margin: const EdgeInsets.only(left: 6, right: 6, top: 0, bottom: 10),
+          padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeEight, horizontal: Dimensions.paddingSizeExtraSmall),
+          decoration: BoxDecoration(
+            color: isSelected ? Theme.of(context).primaryColor.withValues(alpha: 0.08) : Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
+            border: Border.all(
+              color: isSelected ? Theme.of(context).primaryColor : Colors.transparent,
+              width: 1.4,
+            ),
+            boxShadow: isSelected ? [] : [
+              BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 6, offset: const Offset(0, 2)),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                child: CustomImageWidget(
+                  image: category.imageFullUrl?.path ?? '',
+                  height: 38, width: 38, fit: BoxFit.cover,
+                ),
+              ),
+              const SizedBox(height: Dimensions.paddingSizeExtraExtraSmall),
+              Text(
+                getTranslated(category.name, context) ?? category.name ?? '',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: (isSelected ? titilliumBold : titilliumRegular).copyWith(
+                  color: isSelected ? Theme.of(context).primaryColor : Theme.of(context).textTheme.bodyMedium?.color,
+                  fontSize: Dimensions.fontSizeExtraSmall + 1,
+                ),
+              ),
+            ],
+          ),
+        );
       },
     );
   }

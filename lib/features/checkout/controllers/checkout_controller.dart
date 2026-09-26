@@ -97,7 +97,7 @@ class CheckoutController with ChangeNotifier {
       _isLoading = false;
       _addressIndex = null;
       _billingAddressIndex = null;
-      sameAsBilling = false;
+      sameAsBilling = true;
       if(!Provider.of<AuthController>(Get.context!, listen: false).isLoggedIn()){
         _newUser = apiResponse.response!.data['new_user'];
       }
@@ -271,7 +271,7 @@ class CheckoutController with ChangeNotifier {
     if (apiResponse.response != null && apiResponse.response?.statusCode == 200) {
       _addressIndex = null;
       _billingAddressIndex = null;
-      sameAsBilling = false;
+      sameAsBilling = true;
       _isLoading = false;
 
       RouterHelper.getDigitalPaymentScreenRoute(
@@ -294,7 +294,7 @@ class CheckoutController with ChangeNotifier {
     return apiResponse;
   }
 
-  bool sameAsBilling = false;
+  bool sameAsBilling = true;
   void setSameAsBilling({bool isUpdate = true}) {
     sameAsBilling = !sameAsBilling;
     if(isUpdate) {

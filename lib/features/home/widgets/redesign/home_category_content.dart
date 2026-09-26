@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/category_content_screen_shimmer.dart';
-import 'package:flutter_sixvalley_ecommerce/common/basewidget/category_product_filter_dialog_widget.dart';
-import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_asset_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/no_internet_screen_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/paginated_list_view_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/product_card_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/show_custom_snakbar_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/category/controllers/category_controller.dart';
-import 'package:flutter_sixvalley_ecommerce/features/home/widgets/search_home_page_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product/controllers/product_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/helper/debounce_helper.dart';
 import 'package:flutter_sixvalley_ecommerce/helper/responsive_helper.dart';
-import 'package:flutter_sixvalley_ecommerce/helper/route_healper.dart';
 import 'package:flutter_sixvalley_ecommerce/localization/language_constrants.dart';
 import 'package:flutter_sixvalley_ecommerce/main.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
-import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 
@@ -106,7 +101,7 @@ class _CategoryContentBodyState extends State<_CategoryContentBody> with Automat
                 SliverPersistentHeader(
                   pinned: true,
                   delegate: _SliverSearchBarDelegate(
-                    height: 70,
+                    height: 45,
                     child: Container(
                       color: Theme.of(context).scaffoldBackgroundColor,
                       child: _buildSearchBar(context, categoryId),
@@ -183,81 +178,55 @@ class _CategoryContentBodyState extends State<_CategoryContentBody> with Automat
 
   Widget _buildSearchBar(BuildContext context, int categoryId) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Dimensions.homePagePadding, vertical: Dimensions.paddingSizeSmall).copyWith(right: Dimensions.paddingSizeDefault),
+      padding: const EdgeInsets.only(left: Dimensions.homePagePadding, right: Dimensions.homePagePadding, bottom: 10),
       child: Row(
         children: [
           Expanded(
-            child: TextFormField(
-            controller: searchTextEditingController,
-            textInputAction: TextInputAction.search,
-            onChanged: (value) => setState(() {}),
-            onFieldSubmitted: (value) => _searchProducts(categoryId),
-            style: textMedium.copyWith(fontSize: Dimensions.fontSizeLarge),
-            decoration: InputDecoration(
-                isDense: true,
-                contentPadding: const EdgeInsets.only(left: Dimensions.paddingSizeLarge),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
-                    borderSide: BorderSide(color: Colors.grey[300]!)),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
-                    borderSide: BorderSide(color: Colors.grey[300]!)),
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
-                    borderSide: BorderSide(color: Colors.grey[300]!)),
-                hintText: getTranslated('search_products', context),
-                hintStyle: textRegular.copyWith(color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.9)),
-                suffixIcon: SizedBox(width: searchTextEditingController.text.isNotEmpty ? 70 : 50,
-                  child: Row(children: [
-                    if(searchTextEditingController.text.isNotEmpty)
-                      InkWell(
-                        onTap: () => _clearSearch(categoryId),
-                        child: const Icon(Icons.clear, size: 20,),
-                      ),
-
-                    InkWell(
+            child: Container(
+              height: 35,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(Dimensions.radiusHundred),
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 5, offset: const Offset(0, 3)),
+                ],
+              ),
+              child: TextFormField(
+                controller: searchTextEditingController,
+                textInputAction: TextInputAction.search,
+                onChanged: (value) => setState(() {}),
+                onFieldSubmitted: (value) => _searchProducts(categoryId),
+                style: textMedium.copyWith(fontSize: Dimensions.fontSizeDefault),
+                decoration: InputDecoration(
+                  isDense: true,
+                  isCollapsed: true,
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  contentPadding: EdgeInsets.zero,
+                  prefixIconConstraints: const BoxConstraints(minWidth: 34, minHeight: 20),
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.only(left: Dimensions.paddingSizeSmall),
+                    child: InkWell(
                       onTap: () => _searchProducts(categoryId),
-                      child: Container(
-                        margin: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                        padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(Dimensions.paddingSizeExtraSmall),
-                        ),
-                        child: Image.asset(Images.search, color: Colors.white, height: Dimensions.iconSizeSmall, width: Dimensions.iconSizeSmall, fit: BoxFit.contain),
-                      ),
+                      child: Icon(Icons.search, color: Theme.of(context).hintColor, size: Dimensions.iconSizeDefault),
                     ),
-                  ]),
-                )
+                  ),
+                  hintText: getTranslated('search_products', context),
+                  hintStyle: textRegular.copyWith(color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.9)),
+                  suffixIcon: searchTextEditingController.text.isNotEmpty
+                      ? InkWell(
+                          onTap: () => _clearSearch(categoryId),
+                          child: const Icon(Icons.clear, size: 20),
+                        )
+                      : null,
+                ),
+              ),
             ),
           ),
-          ),
-
-
-          // SizedBox(width: Dimensions.paddingSizeSmall),
-          // InkWell(
-          //   onTap: () {
-          //     showModalBottomSheet(
-          //       context: context,
-          //       isScrollControlled: true,
-          //       backgroundColor: Colors.transparent,
-          //       builder: (_) => CategoryProductFilterDialog(categoryId: categoryId),
-          //     );
-          //   },
-          //   child: Container(
-          //     decoration: BoxDecoration(
-          //       color: Theme.of(context).cardColor,
-          //       borderRadius: BorderRadius.circular(5),
-          //       border: Border.all(color: Theme.of(context).primaryColor.withValues(alpha: 0.15)),
-          //     ),
-          //     padding: const EdgeInsets.all(Dimensions.paddingSizeTwelve),
-          //     child: CustomAssetImageWidget(Images.filterIcon, height: 20, width: 20)
-          //   ),
-          // )
-
         ],
-      )
-
+      ),
     );
   }
 }

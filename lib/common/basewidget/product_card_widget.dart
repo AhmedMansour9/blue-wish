@@ -40,23 +40,32 @@ class ProductCardWidget extends StatelessWidget {
     // PriceConverter.convertPrice(context, product.unitPrice)
 
     return InkWell(
+          borderRadius: BorderRadius.circular(Dimensions.radiusExtraLarge),
           onTap: () => RouterHelper.getProductDetailsRoute(action: RouteAction.push, productId: product.id, slug: product.slug),
-          child: DecoratedBox(
-            decoration: BoxDecoration(border: Border.all(color: Colors.transparent)),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(Dimensions.radiusExtraLarge),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 16, offset: const Offset(0, 6)),
+              ],
+            ),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min,
               children: [
-                Stack(
-                  children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(Dimensions.radiusExtraLarge),
+                    topRight: Radius.circular(Dimensions.radiusExtraLarge),
+                  ),
+                  child: Stack(
+                    children: [
                     AspectRatio(
-                      aspectRatio: 1,
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.all(Radius.circular(Dimensions.radiusSmall)),
-                        child: CustomImageWidget(
-                          width: double.infinity,
-                          height: double.infinity,
-                          image: product.thumbnailFullUrl?.path ?? '',
-                          fit: BoxFit.cover,
-                        ),
+                      aspectRatio: 1.15,
+                      child: CustomImageWidget(
+                        width: double.infinity,
+                        height: double.infinity,
+                        image: product.thumbnailFullUrl?.path ?? '',
+                        fit: BoxFit.cover,
                       ),
                     ),
 
@@ -122,7 +131,7 @@ class ProductCardWidget extends StatelessWidget {
                       ),
 
                     Positioned(
-                      bottom: Dimensions.paddingSizeExtraSmall,
+                      top: Dimensions.paddingSizeExtraSmall,
                       right: Dimensions.paddingSizeExtraSmall,
                       child: FavouriteButtonWidget(
                         sellerNavigationModel: sellerNavigationModel,
@@ -131,11 +140,14 @@ class ProductCardWidget extends StatelessWidget {
                         Provider.of<ThemeController>(context, listen: false).darkTheme ? Theme.of(context).cardColor : Theme.of(context).primaryColor,
                       ),
                     ),
-                  ],
+                    ],
+                  ),
                 ),
-                const SizedBox(height: Dimensions.paddingSizeExtraExtraSmall),
+                const SizedBox(height: 10),
 
-                Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(Dimensions.paddingSizeSmall, 0, Dimensions.paddingSizeSmall, Dimensions.paddingSizeSmall),
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(product.name ?? '',
                       maxLines: 1,
@@ -222,10 +234,11 @@ class ProductCardWidget extends StatelessWidget {
                         ],
                       ),
                     if (!(product.currentStock == 0 && product.productType == 'physical')) ...[
-                      const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+                      const SizedBox(height: 10),
                       AddToCartButtonWidget(product: product),
                     ],
                   ],
+                  ),
                 ),
               ],
             ),
