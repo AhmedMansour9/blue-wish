@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/no_internet_screen_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/checkout/controllers/checkout_controller.dart';
-import 'package:flutter_sixvalley_ecommerce/features/checkout/widgets/change_amount_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/offline_payment/domain/models/offline_payment_model.dart';
 import 'package:flutter_sixvalley_ecommerce/features/splash/domain/models/config_model.dart';
 import 'package:flutter_sixvalley_ecommerce/localization/language_constrants.dart';
@@ -130,10 +129,6 @@ class PaymentMethodBottomSheetWidgetState extends State<PaymentMethodBottomSheet
                                   buttonText: '${getTranslated('pay_via_wallet', context)}',
                                 )),
                             ]),
-
-
-                            ///change amount
-                            ChangeAmountWidget(changeAmountTextController: changeAmountTextController),
 
 
                             if((configModel?.digitalPayment ?? false) && (configModel?.paymentMethods?.isNotEmpty ?? false) && !checkoutController.isCODChecked)
