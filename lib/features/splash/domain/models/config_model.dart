@@ -7,6 +7,7 @@ class ConfigModel {
   int? systemDefaultCurrency;
   bool? digitalPayment;
   bool? cashOnDelivery;
+  bool? cardOnDelivery;
   String? sellerRegistration;
   String? posActive;
   String? companyPhone;
@@ -108,6 +109,7 @@ class ConfigModel {
         this.systemDefaultCurrency,
         this.digitalPayment,
         this.cashOnDelivery,
+        this.cardOnDelivery,
         this.sellerRegistration,
         this.posActive,
         this.companyPhone,
@@ -209,6 +211,7 @@ class ConfigModel {
     systemDefaultCurrency = json['system_default_currency'];
     digitalPayment = json['digital_payment'];
     cashOnDelivery = json['cash_on_delivery'];
+    cardOnDelivery = json['card_on_delivery'];
     sellerRegistration = json['seller_registration'];
     posActive = json['pos_active'];
     companyPhone = json['company_phone'].toString();

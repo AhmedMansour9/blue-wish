@@ -65,7 +65,8 @@ class CheckoutController with ChangeNotifier {
   Future<void> placeOrder({required Function callback, String? addressID,
         String? couponCode, String? couponAmount,
         String? billingAddressId, String? orderNote, String? transactionId,
-        String? paymentNote, int? id, String? name,bool isfOffline = false, bool wallet = false}) async {
+        String? paymentNote, int? id, String? name,bool isfOffline = false, bool wallet = false,
+        String? paymentMethod}) async {
     for(TextEditingController textEditingController in inputFieldControllerList) {
       inputValueList.add(textEditingController.text.trim());
 
@@ -88,8 +89,9 @@ class CheckoutController with ChangeNotifier {
       orderNote: orderNote,
       isCheckCreateAccount: _isCheckCreateAccount,
       password: passwordController.text.trim(),
-      cashChangeAmount: _cashChangesAmount,
+      cashChangeAmount: paymentMethod == 'card_on_delivery' ? null : _cashChangesAmount,
       currentCurrencyCode: Provider.of<SplashController>(Get.context!, listen: false).myCurrency?.code,
+      paymentMethod: paymentMethod,
     );
 
     if (apiResponse.response != null && apiResponse.response!.statusCode == 200) {
@@ -143,6 +145,7 @@ class CheckoutController with ChangeNotifier {
     isCODChecked = false;
     isWalletChecked = false;
     isOfflineChecked = false;
+    isCardOnDeliveryChecked = false;
   }
 
 
@@ -169,23 +172,33 @@ class CheckoutController with ChangeNotifier {
   bool isOfflineChecked = false;
   bool isCODChecked = false;
   bool isWalletChecked = false;
+  bool isCardOnDeliveryChecked = false;
 
   void setOfflineChecked(String type, {bool notify = true}) {
     if(type == 'offline'){
       isOfflineChecked = !isOfflineChecked;
       isCODChecked = false;
       isWalletChecked = false;
+      isCardOnDeliveryChecked = false;
       _paymentMethodIndex = -1;
       setOfflinePaymentMethodSelectedIndex(0);
     }else if(type == 'cod'){
       isCODChecked = !isCODChecked;
       isOfflineChecked = false;
       isWalletChecked = false;
+      isCardOnDeliveryChecked = false;
+      _paymentMethodIndex = -1;
+    }else if(type == 'card_on_delivery'){
+      isCardOnDeliveryChecked = !isCardOnDeliveryChecked;
+      isOfflineChecked = false;
+      isCODChecked = false;
+      isWalletChecked = false;
       _paymentMethodIndex = -1;
     }else if(type == 'wallet'){
       isWalletChecked = !isWalletChecked;
       isOfflineChecked = false;
       isCODChecked = false;
+      isCardOnDeliveryChecked = false;
       _paymentMethodIndex = -1;
     }
 

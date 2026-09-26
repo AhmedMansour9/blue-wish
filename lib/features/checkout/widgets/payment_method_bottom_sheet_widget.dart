@@ -33,6 +33,8 @@ class PaymentMethodBottomSheetWidgetState extends State<PaymentMethodBottomSheet
     changeAmountTextController.text = '${Provider.of<CheckoutController>(context, listen: false).cashChangesAmount ?? ''}';
     if((configModel?.cashOnDelivery ?? false) && !widget.onlyDigital && !checkoutController.isCODChecked) {
       checkoutController.setOfflineChecked('cod', notify: false);
+    } else if(!(configModel?.cashOnDelivery ?? false) && (configModel?.cardOnDelivery ?? false) && !widget.onlyDigital && !checkoutController.isCardOnDeliveryChecked) {
+      checkoutController.setOfflineChecked('card_on_delivery', notify: false);
     }
     super.initState();
   }
@@ -102,6 +104,18 @@ class PaymentMethodBottomSheetWidgetState extends State<PaymentMethodBottomSheet
                                 fontSize: Dimensions.fontSizeSmall,
                                 onTap: () => checkoutController.setOfflineChecked('cod'),
                                 buttonText: '${getTranslated('cash_on_delivery', context)}',
+                              )),
+                              if((configModel?.cashOnDelivery ?? false) && (configModel?.cardOnDelivery ?? false) && !widget.onlyDigital)
+                                const SizedBox(width: Dimensions.paddingSizeDefault),
+
+                              if((configModel?.cardOnDelivery ?? false) && !widget.onlyDigital) Expanded(child: CustomButton(
+                                isBorder: true,
+                                leftIcon: Images.mastercard,
+                                backgroundColor: checkoutController.isCardOnDeliveryChecked? Theme.of(context).primaryColor : Theme.of(context).cardColor,
+                                textColor:  checkoutController.isCardOnDeliveryChecked? Colors.white : Theme.of(context).textTheme.bodyLarge?.color,
+                                fontSize: Dimensions.fontSizeSmall,
+                                onTap: () => checkoutController.setOfflineChecked('card_on_delivery'),
+                                buttonText: '${getTranslated('card_on_delivery', context)}',
                               )),
                               const SizedBox(width: Dimensions.paddingSizeDefault),
 
@@ -272,7 +286,7 @@ class PaymentMethodBottomSheetWidgetState extends State<PaymentMethodBottomSheet
                   buttonText: '${getTranslated('save', context)}',
                   onTap: () {
                     Navigator.of(context).pop();
-                    if((configModel?.cashOnDelivery ?? false) && !widget.onlyDigital) {
+                    if(((configModel?.cashOnDelivery ?? false) || (configModel?.cardOnDelivery ?? false)) && !widget.onlyDigital) {
                       checkoutController.updatePaymentSelection();
                     }
                   },
@@ -293,10 +307,11 @@ bool _isPaymentMethodsAvailable(BuildContext context, List<OfflineMethods>? offl
   final ConfigModel? configModel = Provider.of<SplashController>(context, listen: false).configModel;
 
   bool isCashOnDeliveryOn = configModel?.cashOnDelivery ?? false;
+  bool isCardOnDeliveryOn = configModel?.cardOnDelivery ?? false;
   bool isWalletOn = configModel?.walletStatus == 1 && Provider.of<AuthController>(context, listen: false).isLoggedIn();
   bool isOnlinePaymentMethodsOn = configModel?.paymentMethods?.isNotEmpty ?? false;
   bool isOfflinePaymentMethodsOn = offlineMethods?.isNotEmpty ?? false;
 
-  return isCashOnDeliveryOn || isWalletOn || isOnlinePaymentMethodsOn || isOfflinePaymentMethodsOn;
+  return isCashOnDeliveryOn || isCardOnDeliveryOn || isWalletOn || isOnlinePaymentMethodsOn || isOfflinePaymentMethodsOn;
 }
 

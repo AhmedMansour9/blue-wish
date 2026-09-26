@@ -57,10 +57,10 @@ class ChoosePaymentWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: Dimensions.paddingSizeDefault),
 
-                if(orderProvider.isCODChecked  ||  orderProvider.isOfflineChecked ||  orderProvider.isWalletChecked || (orderProvider.paymentMethodIndex != -1))
+                if(orderProvider.isCODChecked  ||  orderProvider.isCardOnDeliveryChecked || orderProvider.isOfflineChecked ||  orderProvider.isWalletChecked || (orderProvider.paymentMethodIndex != -1))
                   SizedBox(height: 1, child: const Divider(thickness: .200)),
 
-                if(orderProvider.isCODChecked  ||  orderProvider.isOfflineChecked ||  orderProvider.isWalletChecked || (orderProvider.paymentMethodIndex != -1))
+                if(orderProvider.isCODChecked  ||  orderProvider.isCardOnDeliveryChecked || orderProvider.isOfflineChecked ||  orderProvider.isWalletChecked || (orderProvider.paymentMethodIndex != -1))
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -82,7 +82,8 @@ class ChoosePaymentWidget extends StatelessWidget {
                           ),
                         ),
                       ],) : orderProvider.isCODChecked?
-                      Text(getTranslated('cash_on_delivery', context)??'', style: textRegular.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color)) :orderProvider.isOfflineChecked?
+                      Text(getTranslated('cash_on_delivery', context)??'', style: textRegular.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color)) : orderProvider.isCardOnDeliveryChecked?
+                      Text(getTranslated('card_on_delivery', context)??'', style: textRegular.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color)) :orderProvider.isOfflineChecked?
                       Text(getTranslated('offline_payment', context)??'', style: textRegular.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color)) :orderProvider.isWalletChecked?
                       Text(getTranslated('wallet_payment', context)??'', style: textRegular.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color)
                       ) :

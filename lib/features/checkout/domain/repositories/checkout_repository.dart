@@ -28,6 +28,7 @@ class CheckoutRepository implements CheckoutRepositoryInterface{
         String? password,
         double? cashChangeAmount,
         String? currentCurrencyCode,
+        String? paymentMethod,
       }) async {
     try {
       // Build query parameters map
@@ -41,9 +42,16 @@ class CheckoutRepository implements CheckoutRepositoryInterface{
         'is_guest': '${Provider.of<AuthController>(Get.context!, listen: false).isLoggedIn() ? 0 : 1}',
         'is_check_create_account': (isCheckCreateAccount ?? false) ? 1 : 0,
         'password': password,
-        'bring_change_amount' : cashChangeAmount,
         'current_currency_code': currentCurrencyCode,
       };
+
+      // Cash change amount is only relevant for cash payments, not card-on-delivery.
+      if (paymentMethod != 'card_on_delivery') {
+        queryParams['bring_change_amount'] = cashChangeAmount;
+      }
+      if (paymentMethod != null) {
+        queryParams['payment_method'] = paymentMethod;
+      }
 
       debugPrint('----------(order_place)-----$queryParams');
 

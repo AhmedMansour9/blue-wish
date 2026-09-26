@@ -227,6 +227,7 @@
   "connected": "Connected",
   "dark_theme": "Dark Theme",
   "cash_on_delivery": "Cash On Delivery",
+  "card_on_delivery": "Card On Delivery",
   "digital_payment": "Digital Payment",
   "order_placed": "Order Placed Successfully !",
   "your_order_placed": "We have received your order and will ship it shortly. Your Order ID ",

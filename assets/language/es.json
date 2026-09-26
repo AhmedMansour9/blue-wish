@@ -227,6 +227,7 @@
   "connected": "Conectado",
   "dark_theme": "Tema oscuro",
   "cash_on_delivery": "Contra reembolso",
+  "card_on_delivery": "Pago con tarjeta contra entrega",
   "digital_payment": "Pago Digital",
   "order_placed": "¡Pedido realizado con éxito!",
   "your_order_placed": "Para encontrar el ID del pedido y los detalles, consulte su correo electrónico.",

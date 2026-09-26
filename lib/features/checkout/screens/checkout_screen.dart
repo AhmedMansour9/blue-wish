@@ -182,6 +182,16 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                             orderNote : orderNote);
                                       }
 
+                                      else if (orderProvider.isCardOnDeliveryChecked && !widget.onlyDigital){
+                                        orderProvider.placeOrder(callback: _callback,
+                                            addressID : addressId,
+                                            couponCode : couponCode,
+                                            couponAmount : couponCodeAmount,
+                                            billingAddressId : billingAddressId,
+                                            orderNote : orderNote,
+                                            paymentMethod: 'card_on_delivery');
+                                      }
+
                                       else if(orderProvider.isOfflineChecked){
                                         // Navigator.of(context).push(MaterialPageRoute(builder: (_)=> OfflinePaymentScreen(payableAmount: _order + widget.shippingFee - widget.discount - (_referralDiscount ?? 0) - _couponDiscount! + _tax, callback: _callback)));
                                         RouterHelper.getOfflinePaymentScreen(payableAmount: (_order + widget.shippingFee - widget.discount - (_referralDiscount ?? 0) - _couponDiscount! + _tax), callback: _callback);
