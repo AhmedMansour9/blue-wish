@@ -237,7 +237,7 @@ class _CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
                       flagWidth: Dimensions.paddingSizeExtraLarge,
                       onChanged: widget.onCountryChanged,
                       initialSelection: widget.countryDialCode,
-                      favorite: [widget.countryDialCode != null ? widget.countryDialCode! : 'BD'],
+                      favorite: [widget.countryDialCode != null ? widget.countryDialCode! : '+20'],
                       showDropDownButton: true,
                       showCountryOnly: false,
                       showOnlyCountryWhenClosed: false,

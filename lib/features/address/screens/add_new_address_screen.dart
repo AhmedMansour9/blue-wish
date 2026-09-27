@@ -44,7 +44,8 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
   final TextEditingController _contactPersonEmailController = TextEditingController();
   final TextEditingController _contactPersonNumberController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
-  final TextEditingController _zipCodeController = TextEditingController();
+  // Zip field is hidden from the UI, but the backend still requires a non-empty value.
+  final TextEditingController _zipCodeController = TextEditingController(text: '00000');
   final TextEditingController _countryCodeController = TextEditingController();
   final FocusNode _addressNode = FocusNode();
   final FocusNode _nameNode = FocusNode();
@@ -54,9 +55,9 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
   final FocusNode _zipNode = FocusNode();
   GoogleMapController? _controller;
   CameraPosition? _cameraPosition;
-  bool _updateAddress = true;
+  bool _updateAddress = false;
   Address? _address;
-  String zip = '',  country = 'IN';
+  String zip = '',  country = 'EG';
   late LatLng _defaut;
 
   final GlobalKey<FormState> _addressFormKey = GlobalKey();
@@ -75,7 +76,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
     }
 
     Provider.of<AuthController>(context, listen: false).setCountryCode(CountryCode.fromCountryCode(Provider.of<SplashController>(context, listen: false).configModel!.countryCode!).dialCode!, notify: false);
-    _countryCodeController.text = CountryCode.fromCountryCode(Provider.of<SplashController>(context, listen: false).configModel!.countryCode!).name??'Bangladesh';
+    _countryCodeController.text = CountryCode.fromCountryCode(Provider.of<SplashController>(context, listen: false).configModel!.countryCode!).name??'Egypt';
     Provider.of<AddressController>(context, listen: false).getAddressType();
     Provider.of<AddressController>(context, listen: false).getRestrictedDeliveryCountryList();
     Provider.of<AddressController>(context, listen: false).getRestrictedDeliveryZipList();
@@ -295,6 +296,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                               )),
 
 
+                          /* Shipping/Billing address type radio - hidden
                           Padding(padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeSmall),
                             child: SizedBox(
                               height: 50,
@@ -334,7 +336,9 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                               ),
                             ),
                           ),
+                          */
 
+                          const SizedBox(height: Dimensions.paddingSizeDefaultAddress),
 
                           CustomTextFieldWidget(labelText: getTranslated('delivery_address', context),
                             hintText: getTranslated('usa', context),
@@ -453,6 +457,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                           const SizedBox(height: Dimensions.paddingSizeDefaultAddress),
 
 
+                          /* Zip code field - hidden
                           Provider.of<SplashController>(context, listen: false).configModel!.deliveryZipCodeAreaRestriction == 0 ?
                           CustomTextFieldWidget(
                             labelText: getTranslated('zip', context),
@@ -498,6 +503,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                             ),
                           ),
                           const SizedBox(height: Dimensions.paddingSizeDefaultAddress),
+                          */
 
                           Container(height: 50.0,
                             margin: const EdgeInsets.all(Dimensions.paddingSizeSmall),
@@ -513,7 +519,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                                     phone: '${Provider.of<AuthController>(context, listen: false).countryDialCode}${_contactPersonNumberController.text.trim()}',
                                     email: _contactPersonEmailController.text.trim(),
                                     city: _cityController.text,
-                                    zip: _zipCodeController.text,
+                                    zip: _zipCodeController.text.trim().isEmpty ? '00000' : _zipCodeController.text,
                                     country:  _countryCodeController.text,
                                     guestId: Provider.of<AuthController>(context, listen: false).getGuestToken(),
                                     isBilling: _address == Address.billing,

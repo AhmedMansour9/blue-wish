@@ -75,6 +75,7 @@ class CancelAndSupportWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeSmall, vertical: Dimensions.paddingSizeSmall),
           child: Column(
             children: [
+              /* Cancel order button - hidden
               (orderModel != null && (orderModel!.customerId! == int.parse(Provider.of<ProfileController>(context, listen: false).userID)) &&
                   (orderModel!.orderStatus == 'pending') && (orderModel!.orderType != "POS")) ?
               CustomButton(textColor: Theme.of(context).colorScheme.error,
@@ -87,6 +88,9 @@ class CancelAndSupportWidget extends StatelessWidget {
                   ));
                 },
               ) :
+              */
+              false ?
+              const SizedBox() :
               (orderModel != null && Provider.of<AuthController>(context, listen: false).isLoggedIn() &&
                   orderModel!.customerId! == int.parse(Provider.of<ProfileController>(context, listen: false).userID) &&
                   orderModel!.orderStatus == 'delivered' && orderModel!.orderType != "POS") ?
