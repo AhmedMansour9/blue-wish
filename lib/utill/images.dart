@@ -75,6 +75,7 @@ class Images {
   static const String refundPolicy = 'assets/images/refund_policy.png';
   static const String faq = 'assets/images/faq.png';
   static const String category = 'assets/images/category.png';
+  static const String exploreTab = 'assets/images/img_explore.png';
   static const String logout = 'assets/images/logout.png';
   static const String myOrder = 'assets/images/my_order.png';
   static const String support = 'assets/images/support.png';

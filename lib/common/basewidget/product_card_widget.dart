@@ -136,6 +136,7 @@ class ProductCardWidget extends StatelessWidget {
                       child: FavouriteButtonWidget(
                         sellerNavigationModel: sellerNavigationModel,
                         productId: product.id,
+                        iconSize: Dimensions.iconSizeExtraSmall,
                         backgroundColor:
                         Provider.of<ThemeController>(context, listen: false).darkTheme ? Theme.of(context).cardColor : Theme.of(context).primaryColor,
                       ),

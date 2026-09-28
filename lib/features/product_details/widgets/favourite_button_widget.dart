@@ -16,6 +16,7 @@ class FavouriteButtonWidget extends StatefulWidget {
   final int? productId;
   final bool? fromProductDetails;
   final SellerNavigationModel? sellerNavigationModel;
+  final double iconSize;
 
   const FavouriteButtonWidget({
     super.key,
@@ -23,6 +24,7 @@ class FavouriteButtonWidget extends StatefulWidget {
     this.productId,
     this.fromProductDetails = false,
     this.sellerNavigationModel,
+    this.iconSize = Dimensions.paddingSizeDefaultAddress,
   });
 
   @override
@@ -148,15 +150,15 @@ class _FavouriteButtonWidgetState extends State<FavouriteButtonWidget>
                   padding: const EdgeInsets.all(Dimensions.paddingSizeEight),
                   transform: Matrix4.translationValues(0, 1, 0),
                   child: SizedBox(
-                    width: Dimensions.paddingSizeDefaultAddress,
-                    height: Dimensions.paddingSizeDefaultAddress,
+                    width: widget.iconSize,
+                    height: widget.iconSize,
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
                         Icon(
                           CupertinoIcons.heart,
                           color: isDarkMode ? Theme.of(context).primaryColor : Theme.of(context).textTheme.bodyLarge?.color,
-                          size: Dimensions.paddingSizeDefaultAddress,
+                          size: widget.iconSize,
                         ),
                         AnimatedBuilder(
                           animation: _animation,
@@ -167,7 +169,7 @@ class _FavouriteButtonWidgetState extends State<FavouriteButtonWidget>
                           child: Icon(
                             CupertinoIcons.heart_fill,
                             color: Theme.of(context).primaryColor,
-                            size: Dimensions.paddingSizeDefaultAddress,
+                            size: widget.iconSize,
                           ),
                         ),
                       ],

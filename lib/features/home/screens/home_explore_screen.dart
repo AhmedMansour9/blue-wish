@@ -19,11 +19,11 @@ import 'package:flutter_sixvalley_ecommerce/features/deal/controllers/flash_deal
 import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/home_category_content.dart';
 import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/auction_product_section_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/banner_slider_widget.dart';
+import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/best_selling_section.dart';
 import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/featured_products_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/flash_deal_section.dart';
 import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/new_user_exclusive_section.dart';
 import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/top_stores_widget.dart';
-import 'package:flutter_sixvalley_ecommerce/features/home/widgets/search_home_page_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product/controllers/product_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product/domain/models/product_model.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product/enums/product_type.dart';
@@ -52,9 +52,12 @@ class HomeExploreScreen extends StatefulWidget {
 }
 
 class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProviderStateMixin {
-  // Temporarily hides the "Explore" tab (flash deals/banners/featured feed) from the home tab bar.
-  // Flip back to true to restore it — the tab's code is left in place.
-  static const bool _kShowExploreTab = false;
+  static const bool _kShowExploreTab = true;
+
+  // Temporarily hides the New Arrival/Top Product/Best Selling/Discounted product-type
+  // tabs at the very bottom of the Explore tab. Flip back to true to restore —
+  // the tabs' code is left in place, we'll reuse it later.
+  static const bool _kShowProductTypeTabs = false;
 
   final ScrollController _scrollController = ScrollController();
   final Map<int, double> _tabScrollOffsets = {};
@@ -136,9 +139,37 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
   Widget _searchBar(BuildContext context) {
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
+      alignment: Alignment.center,
       child: InkWell(
         onTap: () => RouterHelper.getSearchRoute(action: RouteAction.push),
-        child: SearchHomePageWidget(isCompact: true),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: Dimensions.homePagePadding),
+          child: Container(
+            height: 35,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(Dimensions.radiusHundred),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 5, offset: const Offset(0, 3)),
+              ],
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.search, color: Theme.of(context).hintColor, size: Dimensions.iconSizeDefault),
+                const SizedBox(width: Dimensions.paddingSizeSmall),
+                Text(
+                  getTranslated('search_products', context) ?? '',
+                  style: textRegular.copyWith(
+                    color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.9),
+                    fontSize: Dimensions.fontSizeDefault,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -255,6 +286,28 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
 
           final bool onExploreTab = _kShowExploreTab && (_tabController == null || _tabController!.index == 0);
           final double revealT = onExploreTab ? _tabBarRevealAnim.value : 1.0;
+
+          final Widget exploreFeedContent = ColoredBox(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            child: Column(
+              children: [
+                const SizedBox(height: 120),
+                const FlashDealSection(),
+                const BannersSliderWidget(),
+                const FeaturedProductsWidget(),
+                ClearanceListWidget(),
+                TodaysDealSectionWidget(),
+                if (_isAuctionEnabled)
+                  AuctionProductSectionWidget(onSeeAll: widget.onAuctionSeeAll),
+                const NewUserExclusiveSection(),
+                const BestSellingSection(),
+                if (!_singleVendor) const TopStoresWidget(),
+                const BannersSliderWidget(useFooterBanners: true),
+                const SizedBox(height: 30),
+
+              ],
+            ),
+          );
 
           return Container(
             color: Color.lerp(Theme.of(context).cardColor, Theme.of(context).primaryColor, revealT),
@@ -403,8 +456,8 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                             automaticallyImplyLeading: false,
                             primary: false,
                             pinned: true,
-                            floating: true,
-                            toolbarHeight: 0,
+                            floating: false,
+                            toolbarHeight: innerBoxIsScrolled ? 20 : 0,
                             expandedHeight: 0,
                             surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
                             foregroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -428,7 +481,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                                         indicatorColor: Colors.transparent,
                                         labelPadding: EdgeInsets.zero,
                                         tabs: [
-                                          if (_kShowExploreTab) Tab(text: getTranslated('explore', context)!),
+                                          if (_kShowExploreTab) _ExploreTabCard(index: 0, controller: _tabController!),
                                           ...categories.asMap().entries.map((entry) => _CategoryTabCard(
                                             category: entry.value,
                                             index: _kShowExploreTab ? entry.key + 1 : entry.key,
@@ -451,31 +504,16 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                             child: _searchBar(context),
                           ),
                         ),
-
                         if (onExploreTab) ...[
-                          SliverToBoxAdapter(
-                            child: ColoredBox(
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                              child: Column(
-                                children: [
-                                  const SizedBox(height: Dimensions.paddingSizeOverLarge),
-                                  const FlashDealSection(),
-                                  const BannersSliderWidget(),
-                                  const FeaturedProductsWidget(),
-                                  ClearanceListWidget(),
-                                  TodaysDealSectionWidget(),
-                                  if (_isAuctionEnabled)
-                                    AuctionProductSectionWidget(onSeeAll: widget.onAuctionSeeAll),
-                                  const NewUserExclusiveSection(),
-                                  if (!_singleVendor) const TopStoresWidget(),
-                                  const BannersSliderWidget(useFooterBanners: true),
-                                ],
-                              ),
-                            ),
-                          ),
+                          // When the product-type tabs are hidden, the feed becomes the
+                          // NestedScrollView's scrollable `body` instead (see below) so it
+                          // doesn't leave a trailing blank viewport-sized gap.
+                          if (_kShowProductTypeTabs)
+                          SliverToBoxAdapter(child: exploreFeedContent),
 
+                          if (_kShowProductTypeTabs)
                           SliverPersistentHeader(
-                            pinned: true,
+                            pinned: false,
                             delegate: _SliverTabBarDelegate(
                               height: 46,
                               stuckToSearch: true,
@@ -492,10 +530,10 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                       ];
                     },
 
-                    body: onExploreTab ? TabBarView(
+                    body: onExploreTab ? (_kShowProductTypeTabs ? TabBarView(
                       controller: _productTabController,
                       children: _productTypes.map((type) => _ListItemWidget(productType: type)).toList(),
-                    ) : _switchingToCategory ? const CategoryContentScreenShimmer() : TabBarView(
+                    ) : CustomScrollView(slivers: [SliverToBoxAdapter(child: exploreFeedContent)])) : _switchingToCategory ? const CategoryContentScreenShimmer() : TabBarView(
                       controller: _tabController,
                       children: [
                         if (_kShowExploreTab) const SizedBox(),
@@ -589,6 +627,59 @@ class _CustomizableSpaceBarWidget extends StatelessWidget {
         final deltaExtent = settings.maxExtent - settings.minExtent;
         final scrollingRate = (1.0 - (settings.currentExtent - settings.minExtent) / deltaExtent).clamp(0.0, 1.0);
         return builder(context, scrollingRate, child);
+      },
+    );
+  }
+}
+
+class _ExploreTabCard extends StatelessWidget {
+  final int index;
+  final TabController controller;
+
+  const _ExploreTabCard({required this.index, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: controller.animation ?? controller,
+      builder: (context, _) {
+        final bool isSelected = controller.index == index;
+        return Container(
+          width: 78,
+          margin: const EdgeInsets.only(left: 6, right: 6, top: 0, bottom: 10),
+          padding: const EdgeInsets.symmetric(vertical: Dimensions.paddingSizeEight, horizontal: Dimensions.paddingSizeExtraSmall),
+          decoration: BoxDecoration(
+            color: isSelected ? Theme.of(context).primaryColor.withValues(alpha: 0.08) : Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
+            border: Border.all(
+              color: isSelected ? Theme.of(context).primaryColor : Colors.transparent,
+              width: 1.4,
+            ),
+            boxShadow: isSelected ? [] : [
+              BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 6, offset: const Offset(0, 2)),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+                child: Image.asset(Images.exploreTab, height: 38, width: 38, fit: BoxFit.cover),
+              ),
+              const SizedBox(height: Dimensions.paddingSizeExtraExtraSmall),
+              Text(
+                getTranslated('explore', context) ?? '',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: (isSelected ? titilliumBold : titilliumRegular).copyWith(
+                  color: isSelected ? Theme.of(context).primaryColor : Theme.of(context).textTheme.bodyMedium?.color,
+                  fontSize: Dimensions.fontSizeExtraSmall + 1,
+                ),
+              ),
+            ],
+          ),
+        );
       },
     );
   }
