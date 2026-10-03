@@ -35,13 +35,18 @@ class SocialLoginWidget extends StatefulWidget {
 class SocialLoginWidgetState extends State<SocialLoginWidget> {
   SocialLoginModel socialLogin = SocialLoginModel();
 
+  // Temporarily hides the Facebook login option regardless of the admin's
+  // config toggle. Flip back to false to restore — the button's code is left
+  // in place.
+  static const bool _kHideFacebookLogin = true;
+
   @override
   Widget build(BuildContext context) {
     final ConfigModel? configModel = Provider.of<SplashController>(context, listen: false).configModel;
     final socialLoginConfig = configModel?.customerLogin?.socialMediaLoginOptions;
     List<String> socialLoginList = [];
 
-    if(socialLoginConfig?.facebook == 1) {
+    if(socialLoginConfig?.facebook == 1 && !_kHideFacebookLogin) {
       socialLoginList.add("facebook");
     }
 
@@ -65,7 +70,7 @@ class SocialLoginWidgetState extends State<SocialLoginWidget> {
                     image: Images.google,
                   ),
                 )),
-           if (socialLoginConfig?.facebook == 1)
+           if (socialLoginConfig?.facebook == 1 && !_kHideFacebookLogin)
             Expanded(
               child: InkWell(
                 onTap: () => facebookLogin(context, widget.fromPage, widget.onLoginSuccess),
@@ -103,7 +108,7 @@ class SocialLoginWidgetState extends State<SocialLoginWidget> {
             ],
 
 
-            if(socialLoginConfig?.facebook == 1)...[
+            if(socialLoginConfig?.facebook == 1 && !_kHideFacebookLogin)...[
 
               Expanded(child: InkWell(
                 onTap: () => facebookLogin(context, widget.fromPage, widget.onLoginSuccess),
@@ -142,7 +147,7 @@ class SocialLoginWidgetState extends State<SocialLoginWidget> {
             ),
             const SizedBox(width: Dimensions.paddingSizeLarge),
           ],
-          if (socialLoginConfig?.facebook == 1) ...[
+          if (socialLoginConfig?.facebook == 1 && !_kHideFacebookLogin) ...[
             InkWell(
               onTap: () => facebookLogin(context, widget.fromPage, widget.onLoginSuccess),
               child: const SocialLoginButtonWidget(

@@ -1198,11 +1198,14 @@ class AuthController with ChangeNotifier {
             onLoginSuccess();
           });
         }
-      } else if (onLoginSuccess != null) {
-        GoRouter.of(Get.context!).pop();
-        onLoginSuccess();
       } else {
-        GoRouter.of(Get.context!).pop();
+        final GoRouter router = GoRouter.of(Get.context!);
+        if (router.canPop()) {
+          router.pop();
+        } else {
+          RouterHelper.getDashboardRoute(action: RouteAction.pushReplacement);
+        }
+        onLoginSuccess?.call();
       }
     } else {
       RouterHelper.getDashboardRoute(action: RouteAction.pushReplacement);

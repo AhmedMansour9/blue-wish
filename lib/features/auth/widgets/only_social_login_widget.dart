@@ -63,7 +63,7 @@ class _OnlySocialLoginWidgetState extends State<OnlySocialLoginWidget> {
     final Size size = MediaQuery.of(context).size;
 
     final socialLogin = SocialMediaLoginOptions(
-      facebook: 1,
+      facebook: 0, // Temporarily hidden; flip back to 1 to restore.
       google: 1,
       apple: 1
     );

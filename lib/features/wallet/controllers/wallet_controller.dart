@@ -75,7 +75,6 @@ class WalletController extends ChangeNotifier {
 
     } else {
       _walletTransactionModel?.walletTransactionList = [];
-      ApiChecker.checkApi(apiResponse);
     }
     notifyListeners();
   }
