@@ -47,7 +47,7 @@ ThemeData light({Color? primaryColor, Color? secondaryColor})=> ThemeData(
 
   pageTransitionsTheme: const PageTransitionsTheme(builders: {
     TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-    TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
+    TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
     TargetPlatform.fuchsia: ZoomPageTransitionsBuilder(),
   }),
 );
