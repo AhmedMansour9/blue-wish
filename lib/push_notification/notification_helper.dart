@@ -349,6 +349,29 @@ class NotificationHelper {
     return filePath;
   }
 
+  /// Returns the FCM token, or null when it can't be obtained.
+  /// On iOS, FCM needs the APNs token first; calling getToken() before it
+  /// arrives (or when APNs is unavailable, e.g. some simulators) throws.
+  static Future<String?> getFcmToken() async {
+    try {
+      if (Platform.isIOS) {
+        String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+        for (int i = 0; apnsToken == null && i < 5; i++) {
+          await Future.delayed(const Duration(seconds: 1));
+          apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+        }
+        if (apnsToken == null) {
+          log('FCM token skipped: APNs token not available');
+          return null;
+        }
+      }
+      return await FirebaseMessaging.instance.getToken();
+    } catch (e) {
+      log('FCM getToken failed: $e');
+      return null;
+    }
+  }
+
   static Future<void> subscribeToAuctionTopics(int auctionId) async {
     try {
       await FirebaseMessaging.instance.subscribeToTopic('auction_went_live_$auctionId');

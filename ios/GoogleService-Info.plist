@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>975837518429-q55pudr659qujnlnkajhaeesqpqf1slk.apps.googleusercontent.com</string>
+	<string>804083944604-gb1ndddqn5i3nn1j5lmuik8hffmf5fkv.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.975837518429-q55pudr659qujnlnkajhaeesqpqf1slk</string>
+	<string>com.googleusercontent.apps.804083944604-gb1ndddqn5i3nn1j5lmuik8hffmf5fkv</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>975837518429-c373gg0tgmoihfavv7glcfq717i2vcvl.apps.googleusercontent.com</string>
+	<string>804083944604-a0ldt6mcfole5tp8p60sk20e3fd704cl.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCpwXU-LIhoOnCp6h1Ixn0joCMrYtvF4Z0</string>
+	<string>AIzaSyAXMck4mBNLR2kmrhWra4t6U0Gx0s0nQiE</string>
 	<key>GCM_SENDER_ID</key>
-	<string>975837518429</string>
+	<string>804083944604</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.sixamtech.sixValley</string>
+	<string>com.bluewish</string>
 	<key>PROJECT_ID</key>
-	<string>sixvally-ecommerce</string>
+	<string>blue-wish</string>
 	<key>STORAGE_BUCKET</key>
-	<string>sixvally-ecommerce.appspot.com</string>
+	<string>blue-wish.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:975837518429:ios:1ca748007153e5909f0bb4</string>
+	<string>1:804083944604:ios:57c4832b194ea266663159</string>
 </dict>
 </plist>

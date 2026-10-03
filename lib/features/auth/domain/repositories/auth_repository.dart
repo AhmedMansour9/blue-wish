@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_sixvalley_ecommerce/data/datasource/remote/dio/dio_client.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_sixvalley_ecommerce/data/model/api_response.dart';
 import 'package:flutter_sixvalley_ecommerce/features/auth/controllers/auth_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/features/auth/domain/repositories/auth_repository_interface.dart';
 import 'package:flutter_sixvalley_ecommerce/main.dart';
+import 'package:flutter_sixvalley_ecommerce/push_notification/notification_helper.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/app_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -88,8 +88,10 @@ class AuthRepository implements AuthRepoInterface{
   Future<ApiResponseModel> updateDeviceToken() async {
     try {
       String? deviceToken = await _getDeviceToken();
-      FirebaseMessaging.instance.subscribeToTopic(AppConstants.topic);
-      FirebaseMessaging.instance.subscribeToTopic(AppConstants.demoTopic);
+      if (deviceToken != null) {
+        FirebaseMessaging.instance.subscribeToTopic(AppConstants.topic);
+        FirebaseMessaging.instance.subscribeToTopic(AppConstants.demoTopic);
+      }
       Response response = await dioClient!.post(
         AppConstants.tokenUri,
         data: {"_method": "put", 'guest_id' : Provider.of<AuthController>(Get.context!, listen: false).getGuestToken(),
@@ -102,12 +104,7 @@ class AuthRepository implements AuthRepoInterface{
   }
 
   Future<String?> _getDeviceToken() async {
-    String? deviceToken;
-    if(Platform.isIOS) {
-      deviceToken = await FirebaseMessaging.instance.getToken();
-    }else {
-      deviceToken = await FirebaseMessaging.instance.getToken();
-    }
+    String? deviceToken = await NotificationHelper.getFcmToken();
     if (deviceToken != null) {
       log('--------Device Token---------- $deviceToken--');
     }
