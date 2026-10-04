@@ -47,7 +47,6 @@ class Images {
   static const String contactUs = 'assets/images/contact_us.png';
   static const String login = 'assets/images/login.png';
   static const String maintenance = 'assets/images/maintenance.png';
-  static const String facebook = 'assets/images/facebook.png';
   static const String google = 'assets/images/google.png';
   static const String termCondition = 'assets/images/terms-and-conditions.png';
   static const String mapMarker = 'assets/images/location.png';

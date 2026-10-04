@@ -999,21 +999,18 @@ class LoginOption {
 
 class SocialMediaLoginOptions {
   int? google;
-  int? facebook;
   int? apple;
 
-  SocialMediaLoginOptions({this.google, this.facebook, this.apple});
+  SocialMediaLoginOptions({this.google, this.apple});
 
   SocialMediaLoginOptions.fromJson(Map<String, dynamic> json) {
     google = int.tryParse(json['google'].toString());
-    facebook = int.tryParse(json['facebook'].toString());
     apple = int.tryParse(json['apple'].toString());
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['google'] = google;
-    data['facebook'] = facebook;
     data['apple'] = apple;
     return data;
   }

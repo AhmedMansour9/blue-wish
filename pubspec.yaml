@@ -31,7 +31,6 @@ dependencies:
   flutter_local_notifications: ^21.0.0
   path_provider: ^2.1.5
   google_sign_in: ^7.2.0
-  flutter_facebook_auth: ^7.1.6
   flutter_svg: ^2.3.0
   country_code_picker: ^3.4.1
   pin_code_fields: ^8.0.1
@@ -88,7 +87,6 @@ dependencies:
   skeletonizer: ^2.1.3
   phone_numbers_parser: ^9.0.23
   go_router: ^17.2.3
-  app_tracking_transparency: ^2.0.7
   app_links: ^7.1.1
   flutter_image_compress: ^2.4.0
   textfield_tags: ^2.0.2

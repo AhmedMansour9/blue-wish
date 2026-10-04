@@ -279,6 +279,5 @@ bool _isShowSocialLoginButton (ConfigModel configModel, SocialMediaLoginOptions?
       && (configModel.customerLogin?.loginOption?.manualLogin != 1)
       && ( (socialStatus?.apple == 1 && defaultTargetPlatform == TargetPlatform.iOS)
           || socialStatus?.google == 1
-          || socialStatus?.facebook == 1
       );
 }

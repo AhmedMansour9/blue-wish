@@ -13,7 +13,6 @@ import 'package:flutter_sixvalley_ecommerce/helper/route_healper.dart';
 import 'package:flutter_sixvalley_ecommerce/localization/language_constrants.dart';
 import 'package:flutter_sixvalley_ecommerce/main.dart';
 import 'package:flutter_sixvalley_ecommerce/features/auth/controllers/auth_controller.dart';
-import 'package:flutter_sixvalley_ecommerce/features/auth/controllers/facebook_login_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/features/auth/controllers/google_login_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/features/splash/controllers/splash_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
@@ -35,20 +34,11 @@ class SocialLoginWidget extends StatefulWidget {
 class SocialLoginWidgetState extends State<SocialLoginWidget> {
   SocialLoginModel socialLogin = SocialLoginModel();
 
-  // Temporarily hides the Facebook login option regardless of the admin's
-  // config toggle. Flip back to false to restore — the button's code is left
-  // in place.
-  static const bool _kHideFacebookLogin = true;
-
   @override
   Widget build(BuildContext context) {
     final ConfigModel? configModel = Provider.of<SplashController>(context, listen: false).configModel;
     final socialLoginConfig = configModel?.customerLogin?.socialMediaLoginOptions;
     List<String> socialLoginList = [];
-
-    if(socialLoginConfig?.facebook == 1 && !_kHideFacebookLogin) {
-      socialLoginList.add("facebook");
-    }
 
     if (socialLoginConfig?.google == 1) {
       socialLoginList.add("google");
@@ -70,15 +60,6 @@ class SocialLoginWidgetState extends State<SocialLoginWidget> {
                     image: Images.google,
                   ),
                 )),
-           if (socialLoginConfig?.facebook == 1 && !_kHideFacebookLogin)
-            Expanded(
-              child: InkWell(
-                onTap: () => facebookLogin(context, widget.fromPage, widget.onLoginSuccess),
-                child: SocialLoginButtonWidget(
-                  text: getTranslated('continue_with_facebook', context)!,
-                  image: Images.facebook,
-                ),
-              ),),
 
             if(socialLoginConfig?.apple == 1 && defaultTargetPlatform == TargetPlatform.iOS)
               Expanded(
@@ -107,20 +88,6 @@ class SocialLoginWidgetState extends State<SocialLoginWidget> {
               const SizedBox(width: Dimensions.paddingSizeDefault),
             ],
 
-
-            if(socialLoginConfig?.facebook == 1 && !_kHideFacebookLogin)...[
-
-              Expanded(child: InkWell(
-                onTap: () => facebookLogin(context, widget.fromPage, widget.onLoginSuccess),
-                child: SocialLoginButtonWidget(
-                  text: getTranslated('facebook', context)!,
-                  image: Images.facebook,
-                ),
-              )),
-              socialLoginConfig?.apple == 1 ? const SizedBox(width: Dimensions.paddingSizeDefault)
-                  : const SizedBox.shrink(),
-            ],
-
             if(socialLoginConfig?.apple == 1 && defaultTargetPlatform == TargetPlatform.iOS)...[
               Expanded(
                 child: InkWell(
@@ -135,41 +102,7 @@ class SocialLoginWidgetState extends State<SocialLoginWidget> {
             ],
 
           ]);
-        }   else if(socialLoginList.length == 3){
-        return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          if (socialLoginConfig?.google == 1) ...[
-            InkWell(
-              onTap: () => googleLogin(context, widget.fromPage, widget.onLoginSuccess),
-              child: const SocialLoginButtonWidget(
-                image: Images.google,
-                padding: EdgeInsets.all(Dimensions.paddingSizeSmall),
-              ),
-            ),
-            const SizedBox(width: Dimensions.paddingSizeLarge),
-          ],
-          if (socialLoginConfig?.facebook == 1 && !_kHideFacebookLogin) ...[
-            InkWell(
-              onTap: () => facebookLogin(context, widget.fromPage, widget.onLoginSuccess),
-              child: const SocialLoginButtonWidget(
-                image: Images.facebook,
-                padding: EdgeInsets.all(Dimensions.paddingSizeSmall),
-              ),
-            ),
-            const SizedBox(width: Dimensions.paddingSizeLarge),
-          ],
-          if (socialLoginConfig?.apple == 1 &&
-              defaultTargetPlatform == TargetPlatform.iOS) ...[
-            InkWell(
-              onTap: () => appleLogin(context, widget.fromPage, widget.onLoginSuccess),
-              child: SocialLoginButtonWidget(
-                image: Images.appleLogo,
-                color: Theme.of(context).textTheme.bodyMedium?.color,
-                padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
-              ),
-            ),
-          ],
-        ]);
-      } else {
+        } else {
         return Container(
           height: 50,
           width: 50,
@@ -255,28 +188,6 @@ Future<void> googleLogin(BuildContext context, String? fromPage, VoidCallback? o
       socialLogin.uniqueId = id;
       socialLogin.name = name;
 
-      await Provider.of<AuthController>(Get.context!, listen: false).socialLogin(socialLogin, route, fromPage, onLoginSuccess);
-    }
-  } catch (er) {
-    debugPrint('access token error is : $er');
-  }
-}
-
-Future<void> facebookLogin(BuildContext context, String? fromPage, VoidCallback? onLoginSuccess) async {
-  SocialLoginModel socialLogin = SocialLoginModel();
-
-  try {
-    await Provider.of<FacebookLoginController>(context, listen: false).login();
-    String? id, token, email, medium;
-    if (Provider.of<FacebookLoginController>(Get.context!, listen: false).userData != null) {
-      id = Provider.of<FacebookLoginController>(Get.context!, listen: false).userData?['id'];
-      email = Provider.of<FacebookLoginController>(Get.context!, listen: false).userData?['email'];
-      token = Provider.of<FacebookLoginController>(Get.context!, listen: false).result.accessToken?.tokenString;
-      medium = 'facebook';
-      socialLogin.email = email;
-      socialLogin.medium = medium;
-      socialLogin.token = token;
-      socialLogin.uniqueId = id;
       await Provider.of<AuthController>(Get.context!, listen: false).socialLogin(socialLogin, route, fromPage, onLoginSuccess);
     }
   } catch (er) {
