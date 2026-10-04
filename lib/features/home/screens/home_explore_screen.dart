@@ -330,7 +330,10 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                       return [
                         SliverAppBar(
                           floating: false,
+                          pinned: true,
+                          toolbarHeight: 0,
                           elevation: 0,
+                          scrolledUnderElevation: 0,
                           centerTitle: false,
                           automaticallyImplyLeading: false,
                           backgroundColor: Theme.of(context).primaryColor,
@@ -457,7 +460,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                             primary: false,
                             pinned: true,
                             floating: false,
-                            toolbarHeight: innerBoxIsScrolled ? 20 : 0,
+                            toolbarHeight: 0,
                             expandedHeight: 0,
                             surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
                             foregroundColor: Theme.of(context).scaffoldBackgroundColor,
