@@ -73,7 +73,14 @@ class CheckoutScreenState extends State<CheckoutScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<AddressController>(context, listen: false).getAddressList();
+    Provider.of<AddressController>(context, listen: false).getAddressList().then((addressList) {
+      if(!mounted || addressList == null || addressList.isEmpty) return;
+      final checkoutController = Provider.of<CheckoutController>(context, listen: false);
+      final int? currentIndex = checkoutController.addressIndex;
+      if(currentIndex == null || currentIndex >= addressList.length) {
+        checkoutController.setAddressIndex(0);
+      }
+    });
     Provider.of<CheckoutController>(context, listen: false).getReferralAmount('0');
     Provider.of<CouponController>(context, listen: false).removePrevCouponData();
     Provider.of<CartController>(context, listen: false).getCartData(context);

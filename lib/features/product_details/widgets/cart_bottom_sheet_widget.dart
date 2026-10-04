@@ -816,6 +816,12 @@ class CartBottomSheetWidgetState extends State<CartBottomSheetWidget> {
 
     } else {
       CartModel cart = CartModel.fromJson(response?.data['cart']);
+      // TODO(min-order-debug): remove after checking minimum order amount.
+      debugPrint('[MIN_ORDER][buy_now] product=${cart.name} '
+          'amount=${((cart.price ?? 0) - (cart.discount ?? 0)) * (cart.quantity ?? 0)} '
+          'minimum(parsed)=${cart.minimumOrderAmountInfo} '
+          'minimum_order_amount_info(raw)=${response?.data['cart']?['minimum_order_amount_info']} '
+          '(no minimum-amount check on this path)');
       _navigateToCheckoutScreen(context, cart, 0);
     }
   }

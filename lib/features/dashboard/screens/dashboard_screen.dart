@@ -91,7 +91,9 @@ class DashBoardScreenState extends State<DashBoardScreen> {
     Provider.of<SplashController>(context, listen: false).getBusinessPagesList('pages');
     final SplashController splashController = Provider.of<SplashController>(context, listen: false);
     if (Provider.of<AuthController>(context, listen: false).isLoggedIn()) {
-      Provider.of<CartController>(context, listen: false).mergeGuestCart();
+      Provider.of<CartController>(context, listen: false).mergeGuestCart().then((_) {
+        if (mounted) Provider.of<CartController>(context, listen: false).getCartData(context, reload: false);
+      });
       Provider.of<WishListController>(context, listen: false).getWishList('');
       Provider.of<ChatController>(context, listen: false).getChatList(1, reload: false, userType: 0);
       Provider.of<ChatController>(context, listen: false).getChatList(1, reload: false, userType: 1);
@@ -99,6 +101,8 @@ class DashBoardScreenState extends State<DashBoardScreen> {
       if (splashController.configModel?.walletStatus == 1) {
         Provider.of<WalletController>(context, listen: false).getTransactionList(1, isUpdate: false);
       }
+    } else {
+      Provider.of<CartController>(context, listen: false).getCartData(context, reload: false);
     }
 
     isAuctionEnabled = splashController.configModel?.isAuctionFeatureEnabled ?? false;
@@ -529,6 +533,7 @@ class ElevatedCard extends StatelessWidget {
                         label: getTranslated('cart', context) ?? 'Cart',
                         index: 2,
                         selectedIndex: selectedIndex,
+                        showCartCount: true,
                         onTap: onItemTapped),
                     NavItem(
                         icon: Images.navOrderIcon,
@@ -579,6 +584,7 @@ class NavItem extends StatelessWidget {
   final int index;
   final int selectedIndex;
   final ValueChanged<int> onTap;
+  final bool showCartCount;
 
   const NavItem({
     super.key,
@@ -587,6 +593,7 @@ class NavItem extends StatelessWidget {
     required this.index,
     required this.selectedIndex,
     required this.onTap,
+    this.showCartCount = false,
   });
 
   @override
@@ -612,11 +619,36 @@ class NavItem extends StatelessWidget {
             ),
             child: Row(mainAxisSize: MainAxisSize.min,
               children: [
-                CustomAssetImageWidget(
-                  icon,
-                  height: isSelected ? Dimensions.paddingSizeDefaultAddress : Dimensions.paddingSizeLarge,
-                  color: isSelected ? Colors.white : Colors.grey.shade500,
-                ),
+                Stack(clipBehavior: Clip.none, children: [
+                  CustomAssetImageWidget(
+                    icon,
+                    height: isSelected ? Dimensions.paddingSizeDefaultAddress : Dimensions.paddingSizeLarge,
+                    color: isSelected ? Colors.white : Colors.grey.shade500,
+                  ),
+                  if (showCartCount)
+                    PositionedDirectional(
+                      top: -6,
+                      end: -8,
+                      child: Consumer<CartController>(builder: (context, cart, child) {
+                        if (cart.cartList.isEmpty) return const SizedBox();
+                        final int count = cart.cartList.length;
+                        return Container(
+                          constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 3),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.error,
+                            borderRadius: BorderRadius.circular(100),
+                            border: Border.all(color: Theme.of(context).cardColor, width: 1.5),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            count > 99 ? '99+' : '$count',
+                            style: textBold.copyWith(fontSize: 9, color: Colors.white, height: 1.2),
+                          ),
+                        );
+                      }),
+                    ),
+                ]),
                 if (isSelected)
                   Flexible(
                     child: Padding(

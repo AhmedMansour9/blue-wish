@@ -48,6 +48,14 @@ class CartController extends ChangeNotifier {
     if (apiResponse.response != null && apiResponse.response!.statusCode == 200) {
       _cartList = [];
       apiResponse.response!.data.forEach((cart) => _cartList.add(CartModel.fromJson(cart)));
+      // TODO(min-order-debug): remove after checking minimum order amount.
+      for (final cart in apiResponse.response!.data) {
+        debugPrint('[MIN_ORDER][cart_api] cartId=${cart['id']} product=${cart['name']} '
+            'sellerIs=${cart['seller_is']} sellerId=${cart['seller_id']} '
+            'price=${cart['price']} discount=${cart['discount']} qty=${cart['quantity']} '
+            'minimum_order_amount_info(raw)=${cart['minimum_order_amount_info']} '
+            '(${cart['minimum_order_amount_info']?.runtimeType})');
+      }
       _cartLoading = false;
     } else {
       _cartLoading = false;

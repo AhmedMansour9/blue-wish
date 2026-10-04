@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_asset_image_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_loader_widget.dart';
@@ -327,7 +326,12 @@ class CartScreenState extends State<CartScreen> {
                                         total += (cart.price! - cart.discount!) * cart.quantity! ;
                                       }
                                     }
-                                    log("===Here===>$total======${sellerGroupList[index].minimumOrderAmountInfo!}>");
+                                    // TODO(min-order-debug): remove after checking minimum order amount.
+                                    debugPrint('[MIN_ORDER][cart_checkout] seller#$index '
+                                        'shop=${sellerGroupList[index].shop?.name} sellerIs=${sellerGroupList[index].sellerIs} '
+                                        'groupChecked=${sellerGroupList[index].isGroupItemChecked} '
+                                        'checkedTotal=$total minimum=${sellerGroupList[index].minimumOrderAmountInfo} '
+                                        'blocked=${total < (sellerGroupList[index].minimumOrderAmountInfo ?? 0)}');
                                     if(total< sellerGroupList[index].minimumOrderAmountInfo!) {
                                       minimum = true;
                                     }
