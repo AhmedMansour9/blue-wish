@@ -1,3 +1,4 @@
+import 'package:flutter_sixvalley_ecommerce/helper/price_converter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_sixvalley_ecommerce/features/checkout/controllers/checkout_controller.dart';
@@ -58,7 +59,7 @@ class _ChangeAmountWidgetState extends State<ChangeAmountWidget> with SingleTick
                             style: textBold.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
                           ),
                           Text(
-                            ' (${splashController.myCurrency?.symbol ?? ''})',
+                            ' (${PriceConverter.currencySymbol(context)})',
                             style: titilliumSemiBold.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color),
                           ),
                         ]),

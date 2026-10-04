@@ -71,7 +71,7 @@ class AddFundDialogueWidget extends StatelessWidget {
                                             prefixIcon: Padding(
                                               padding: const EdgeInsets.only(left: Dimensions.homePagePadding, right: Dimensions.paddingSizeEight),
                                               child: Text(
-                                                configProvider.myCurrency?.symbol ?? '\$',
+                                                PriceConverter.currencySymbol(context),
                                                 style: textRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).hintColor),
                                               ),
                                             ),
