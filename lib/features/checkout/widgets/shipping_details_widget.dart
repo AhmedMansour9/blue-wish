@@ -25,6 +25,9 @@ class ShippingDetailsWidget extends StatefulWidget {
 }
 
 class _ShippingDetailsWidgetState extends State<ShippingDetailsWidget> {
+  // Hides the "Billing To" section in checkout. Billing falls back to the
+  // delivery address (sameAsBilling stays true). Flip to true to restore.
+  static const bool _kShowBillingSection = false;
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +193,7 @@ class _ShippingDetailsWidgetState extends State<ShippingDetailsWidget> {
 
 
                 isGuestMode ? const SizedBox(height: Dimensions.paddingSizeSmall) : const SizedBox(),
-                if(widget.billingAddress || shippingProvider.sameAsBilling)
+                if(_kShowBillingSection && (widget.billingAddress || shippingProvider.sameAsBilling))
                   Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
