@@ -35,6 +35,7 @@ import 'package:flutter_sixvalley_ecommerce/helper/responsive_helper.dart';
 import 'package:flutter_sixvalley_ecommerce/helper/route_healper.dart';
 import 'package:flutter_sixvalley_ecommerce/localization/language_constrants.dart';
 import 'package:flutter_sixvalley_ecommerce/main.dart';
+import 'package:flutter_sixvalley_ecommerce/theme/app_colors.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
@@ -63,7 +64,8 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
   final Map<int, double> _tabScrollOffsets = {};
   bool _switchingToCategory = false;
 
-  static const double _refreshEdgeOffset = 113;
+  static const double _headerHeight = 250;
+  static const double _refreshEdgeOffset = _headerHeight - 10;
 
   TabController? _tabController;
   TabController? _productTabController;
@@ -337,7 +339,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                           centerTitle: false,
                           automaticallyImplyLeading: false,
                           backgroundColor: Theme.of(context).primaryColor,
-                          expandedHeight: 123,
+                          expandedHeight: _headerHeight,
                           flexibleSpace: _CustomizableSpaceBarWidget(
                             builder: (ctx, scrollingRate, child) => Opacity(
                               opacity: (1 - scrollingRate).clamp(0.0, 1.0),
@@ -347,23 +349,27 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                               width: double.infinity,
                               height: double.infinity,
                               decoration: const BoxDecoration(
+                                color: AppColors.secondary,
                                 image: DecorationImage(
-                                  image: AssetImage(Images.imgHeader),
+                                  image: AssetImage(Images.imgBanner),
                                   fit: BoxFit.cover,
+                                  alignment: Alignment.center,
                                 ),
                               ),
                               child: Stack(
                                 clipBehavior: Clip.hardEdge,
                                 children: [
+                                  // Darken the top strip so the greeting/avatar stay readable over the banner art.
                                   Positioned.fill(
                                     child: DecoratedBox(
                                       decoration: BoxDecoration(
                                         gradient: LinearGradient(
-                                          begin: Alignment.centerLeft,
-                                          end: Alignment.centerRight,
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          stops: const [0.0, 0.45],
                                           colors: [
-                                            Colors.black.withValues(alpha: 0.30),
-                                            Colors.black.withValues(alpha: 0.05),
+                                            Colors.black.withValues(alpha: 0.55),
+                                            Colors.black.withValues(alpha: 0.0),
                                           ],
                                         ),
                                       ),
@@ -403,7 +409,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                                                       overflow: TextOverflow.ellipsis,
                                                       style: titilliumBold.copyWith(
                                                         color: Colors.white,
-                                                        fontSize: Dimensions.fontSizeOverLarge,
+                                                        fontSize: Dimensions.fontSizeLarge,
                                                         height: 1.1,
                                                       ),
                                                     ),
@@ -413,7 +419,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                                               GestureDetector(
                                                 onTap: () => RouterHelper.getMoreScreenRoute(action: RouteAction.push),
                                                 child: Container(
-                                                  padding: const EdgeInsets.all(2.5),
+                                                  padding: const EdgeInsets.all(2),
                                                   decoration: BoxDecoration(
                                                     shape: BoxShape.circle,
                                                     border: Border.all(color: Colors.white.withValues(alpha: 0.8), width: 1.5),
@@ -422,7 +428,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                                                   child: ClipOval(
                                                     child: CustomImageWidget(
                                                         image: profileController.userInfoModel?.imageFullUrl?.path ?? '',
-                                                        width: 42, height: 42, placeholder: Images.guestProfile),
+                                                        width: 32, height: 32, placeholder: Images.guestProfile),
                                                   ),
                                                 ),
                                               ),
