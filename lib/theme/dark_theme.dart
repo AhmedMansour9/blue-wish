@@ -2,24 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sixvalley_ecommerce/theme/app_colors.dart';
 
-Color _primaryColor = AppColors.primary; // Teal
-Color _secondaryColor = AppColors.accent; // Navy
+Color _primaryColor = AppColors.primary; // Copper gold
+Color _secondaryColor = AppColors.goldLight; // Soft gold (brand black is the background here)
 
 ThemeData dark = ThemeData(
   fontFamily: 'IBMPlexSansArabic-Medium',
   primaryColor: _primaryColor,
   brightness: Brightness.dark,
-  highlightColor: const Color(0xFF252525),
-  hintColor: const Color(0xFFc7c7c7),
-  cardColor: const Color(0xFF242424),
-  scaffoldBackgroundColor: const Color(0xFF000000),
+  highlightColor: AppColors.card,
+  hintColor: AppColors.textSecondary,
+  cardColor: AppColors.card,
+  scaffoldBackgroundColor: AppColors.background,
   splashColor: Colors.transparent,
 
 
   textTheme: const TextTheme(
-    bodyLarge: TextStyle(color: Color(0xFFE9EEF4)),  // Text color primary
-    bodyMedium: TextStyle(color: Color(0xFFE9EEF4)), // Text color Secondary
-    bodySmall: TextStyle(color: Color(0xFFE9EEF4)),  // Text color Light grey
+    bodyLarge: TextStyle(color: AppColors.textPrimary),  // Text color primary
+    bodyMedium: TextStyle(color: AppColors.textSecondary), // Text color Secondary
+    bodySmall: TextStyle(color: AppColors.textMuted),  // Text color Light grey
   ),
 
   colorScheme : ColorScheme.dark(
@@ -27,13 +27,13 @@ ThemeData dark = ThemeData(
     secondary: _secondaryColor,  // Secondary Color
     tertiary: const Color(0xFFFFBB38), // Warning Color
     tertiaryContainer: const Color(0xFF4A3B2A), // Warm orange-neutral tile/sheet tint
-    surface: const Color(0xFF2D2D2D),
-    onPrimary: AppColors.lightBlue, // Light accent tint
+    surface: AppColors.surface,
+    onPrimary: AppColors.goldLight, // Light accent tint
     onTertiaryContainer: const Color(0xFF04BB7B), // Success Color
-    primaryContainer: AppColors.secondary,
+    primaryContainer: AppColors.goldTintDark,
     onSecondaryContainer: const Color(0x912A2A2A),
     outline: const Color(0xff5C8FFC), // Info Color
-    onTertiary: const Color(0xFF545252),
+    onTertiary: AppColors.border,
     secondaryContainer: const Color(0xFFEFEAE2), // Warm neutral shimmer tone
     surfaceContainer: const Color(0xFFFB6C4C),
     error: const Color(0xFFFF4040), // Danger Color
