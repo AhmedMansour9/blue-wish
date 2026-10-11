@@ -310,7 +310,7 @@ class SplashWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: AppColors.background,
+      color: Colors.black,
       child: Column(mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -320,10 +320,10 @@ class SplashWidget extends StatelessWidget {
           duration: const Duration(milliseconds: 2000), lift: 50, ratio: 0.5, pause: 0.25,
           child: SizedBox(width: 150, child: Image.asset(Images.logo, width: 150.0))
         ),
-        Text(AppConstants.appName,style: textRegular.copyWith(fontSize: Dimensions.fontSizeOverLarge, color: AppColors.primary)),
+        Text(AppConstants.appName,style: textRegular.copyWith(fontSize: Dimensions.fontSizeOverLarge, color: AppColors.white)),
         Padding(
           padding: const EdgeInsets.only(top: Dimensions.paddingSizeSmall),
-          child: Text(AppConstants.slogan,style: textRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: AppColors.textSecondary))
+          child: Text(AppConstants.slogan,style: textRegular.copyWith(fontSize: Dimensions.fontSizeDefault, color: Colors.white70))
         )
       ]),
     );
