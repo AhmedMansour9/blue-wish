@@ -34,7 +34,7 @@ class FeaturedProductsWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: Dimensions.paddingSizeSmall),
-            const _FeaturedProductsShimmer(),
+            const FeaturedProductsShimmer(),
             const SizedBox(height: Dimensions.homePagePadding),
           ]);
         }
@@ -71,8 +71,8 @@ class FeaturedProductsWidget extends StatelessWidget {
   }
 }
 
-class _FeaturedProductsShimmer extends StatelessWidget {
-  const _FeaturedProductsShimmer();
+class FeaturedProductsShimmer extends StatelessWidget {
+  const FeaturedProductsShimmer({super.key});
 
   @override
   Widget build(BuildContext context) {

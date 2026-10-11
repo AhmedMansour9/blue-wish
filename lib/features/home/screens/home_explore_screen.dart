@@ -19,10 +19,11 @@ import 'package:flutter_sixvalley_ecommerce/features/deal/controllers/flash_deal
 import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/home_category_content.dart';
 import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/auction_product_section_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/banner_slider_widget.dart';
-import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/best_selling_section.dart';
-import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/featured_products_widget.dart';
+// import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/best_selling_section.dart';
+import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/category_products_section.dart';
+// import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/featured_products_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/flash_deal_section.dart';
-import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/new_user_exclusive_section.dart';
+// import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/new_user_exclusive_section.dart';
 import 'package:flutter_sixvalley_ecommerce/features/home/widgets/redesign/top_stores_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product/controllers/product_controller.dart';
 import 'package:flutter_sixvalley_ecommerce/features/product/domain/models/product_model.dart';
@@ -296,13 +297,16 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                 const SizedBox(height: 120),
                 const FlashDealSection(),
                 const BannersSliderWidget(),
-                const FeaturedProductsWidget(),
+                // Featured / New-user-exclusive / Best-selling are temporarily replaced by
+                // per-category product rows. Uncomment to restore.
+                // const FeaturedProductsWidget(),
+                const CategoryProductsSections(),
                 ClearanceListWidget(),
                 TodaysDealSectionWidget(),
                 if (_isAuctionEnabled)
                   AuctionProductSectionWidget(onSeeAll: widget.onAuctionSeeAll),
-                const NewUserExclusiveSection(),
-                const BestSellingSection(),
+                // const NewUserExclusiveSection(),
+                // const BestSellingSection(),
                 if (!_singleVendor) const TopStoresWidget(),
                 const BannersSliderWidget(useFooterBanners: true),
                 const SizedBox(height: 30),
