@@ -75,18 +75,17 @@ class _CategoryProductsSection extends StatelessWidget {
           if (productModel == null)
             const FeaturedProductsShimmer()
           else
-            SizedBox(
-              height: MediaQuery.sizeOf(context).shortestSide * 0.65,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.only(left: Dimensions.homePagePadding, right: 15),
-                separatorBuilder: (_, __) => const SizedBox(width: Dimensions.paddingSizeSmall),
-                itemCount: min(products!.length, _maxItems),
-                itemBuilder: (context, index) => SizedBox(
-                  width: 150,
-                  child: ProductCardWidget(product: products[index]),
-                ),
-              ),
+            // All cards in the row share the tallest card's height; the card pins its
+            // add-to-cart button to the bottom so the extra space sits above the button.
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.only(left: Dimensions.homePagePadding, right: 15),
+              child: IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                for (int index = 0; index < min(products!.length, _maxItems); index++) ...[
+                  if (index > 0) const SizedBox(width: Dimensions.paddingSizeSmall),
+                  SizedBox(width: 150, child: ProductCardWidget(product: products[index], fillHeight: true)),
+                ],
+              ])),
             ),
           const SizedBox(height: Dimensions.homePagePadding),
         ]);

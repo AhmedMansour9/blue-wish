@@ -174,10 +174,11 @@ class TodaysDealCard extends StatelessWidget {
                 const SizedBox(height: Dimensions.paddingSizeExtraExtraSmall),
 
                 Text(product.name ?? '',
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: titilliumRegular.copyWith(
                     fontSize: Dimensions.fontSizeSmall,
+                    height: 1.35,
                     color: Theme.of(context).textTheme.bodyLarge?.color,
                   ),
                 ),

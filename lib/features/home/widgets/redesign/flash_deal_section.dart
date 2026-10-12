@@ -71,18 +71,16 @@ class _FlashDealSectionState extends State<FlashDealSection> {
                 child: HomeFlashDealSectionTitle(),
               ),
               const SizedBox(height: Dimensions.paddingSizeDefault),
-              SizedBox(
-                height: MediaQuery.sizeOf(context).shortestSide * 0.65,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.only(left: Dimensions.homePagePadding, right: 15),
-                  separatorBuilder: (_, __) =>
-                  const SizedBox(width: Dimensions.paddingSizeSmall),
-                  itemCount: flashDealController.flashDealList.length > AppConstants.flashDealProductShowLimit ? 11 : flashDealController.flashDealList.length,
-                  itemBuilder: (context, listIndex) {
-                    if (flashDealController.flashDealList.length > AppConstants.flashDealProductShowLimit &&
-                        listIndex == 10) {
-                      return SizedBox(
+              // All cards in the row share the tallest card's height; the card pins its
+              // add-to-cart button to the bottom so the extra space sits above the button.
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.only(left: Dimensions.homePagePadding, right: 15),
+                child: IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                  for (int listIndex = 0; listIndex < (flashDealController.flashDealList.length > AppConstants.flashDealProductShowLimit ? 11 : flashDealController.flashDealList.length); listIndex++) ...[
+                    if (listIndex > 0) const SizedBox(width: Dimensions.paddingSizeSmall),
+                    if (flashDealController.flashDealList.length > AppConstants.flashDealProductShowLimit && listIndex == 10)
+                      SizedBox(
                         height: 150,
                         child: ColoredBox(
                           color: Colors.transparent,
@@ -100,14 +98,14 @@ class _FlashDealSectionState extends State<FlashDealSection> {
                             ),
                           ),
                         ),
-                      );
-                    }
-                    return SizedBox(
-                      width: 150,
-                      child: ProductCardWidget(product: flashDealController.flashDealList[listIndex]),
-                    );
-                  },
-                ),
+                      )
+                    else
+                      SizedBox(
+                        width: 150,
+                        child: ProductCardWidget(product: flashDealController.flashDealList[listIndex], fillHeight: true),
+                      ),
+                  ],
+                ])),
               ),
             ],
           ),

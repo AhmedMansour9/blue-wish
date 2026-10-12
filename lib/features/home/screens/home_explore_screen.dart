@@ -379,7 +379,12 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                                       ),
                                     ),
                                   ),
-                                  SafeArea(
+                                  // Pinned to the top at its natural height: while the header collapses the
+                                  // Stack clips it instead of squeezing it (which overflowed the Column).
+                                  Positioned(
+                                    top: 0, left: 0, right: 0,
+                                    child: SafeArea(
+                                    bottom: false,
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: Dimensions.homePagePadding, vertical: Dimensions.paddingSizeSmall),
                                       child: Consumer<ProfileController>(
@@ -440,6 +445,7 @@ class _HomeExploreScreenState extends State<HomeExploreScreen> with TickerProvid
                                           );
                                         },
                                       ),
+                                    ),
                                     ),
                                   ),
                                   Positioned(

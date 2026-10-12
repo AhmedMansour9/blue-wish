@@ -19,6 +19,9 @@ class ProductCardWidget extends StatelessWidget {
   final bool isBestSelling;
   final bool isNew;
   final SellerNavigationModel? sellerNavigationModel;
+  /// Stretch to the height given by the parent and pin the add-to-cart button to
+  /// the bottom, so cards in the same row share one height. Needs bounded height.
+  final bool fillHeight;
 
   const ProductCardWidget({
     super.key,
@@ -26,6 +29,7 @@ class ProductCardWidget extends StatelessWidget {
     this.isBestSelling = false,
     this.isNew = false,
     this.sellerNavigationModel,
+    this.fillHeight = false,
   });
 
   @override
@@ -50,7 +54,7 @@ class ProductCardWidget extends StatelessWidget {
                 BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 16, offset: const Offset(0, 6)),
               ],
             ),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min,
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: fillHeight ? MainAxisSize.max : MainAxisSize.min,
               children: [
                 ClipRRect(
                   borderRadius: const BorderRadius.only(
@@ -146,15 +150,16 @@ class ProductCardWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
 
-                Padding(
+                _expandIf(fillHeight, Padding(
                   padding: const EdgeInsets.fromLTRB(Dimensions.paddingSizeSmall, 0, Dimensions.paddingSizeSmall, Dimensions.paddingSizeSmall),
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min,
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: fillHeight ? MainAxisSize.max : MainAxisSize.min,
                   children: [
                     Text(product.name ?? '',
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: titilliumRegular.copyWith(
                         fontSize: Dimensions.fontSizeSmall,
+                        height: 1.35,
                         color: Theme.of(context).textTheme.bodyLarge?.color,
                       ),
                     ),
@@ -234,16 +239,19 @@ class ProductCardWidget extends StatelessWidget {
                           ),
                         ],
                       ),
+                    if (fillHeight) const Spacer(),
                     if (!(product.currentStock == 0 && product.productType == 'physical')) ...[
                       const SizedBox(height: 10),
                       AddToCartButtonWidget(product: product),
                     ],
                   ],
                   ),
-                ),
+                )),
               ],
             ),
           ),
         );
   }
+
+  static Widget _expandIf(bool expand, Widget child) => expand ? Expanded(child: child) : child;
 }
