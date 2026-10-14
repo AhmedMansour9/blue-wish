@@ -256,9 +256,11 @@ class ProductController extends ChangeNotifier {
 
   void clearCategoryProductFor(int categoryId) => _categoryProductMap.remove(categoryId);
 
+  /// Drops every cached category page; listening category rows/tabs refetch page 1.
   void clearCategoryProductCache() {
     _categoryProductMap.clear();
     _fetchingCategoryIds.clear();
+    notifyListeners();
   }
 
   /// Debounced entry point for the first page of a category's products. Used on

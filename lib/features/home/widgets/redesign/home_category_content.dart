@@ -84,6 +84,14 @@ class _CategoryContentBodyState extends State<_CategoryContentBody> with Automat
         final bool isLoading = model == null;
         final products = model?.products ?? [];
 
+        if (isLoading && categoryId != -1) {
+          // Cache was cleared (pull-to-refresh / language change) while this tab stayed alive —
+          // refetch; the debounced call skips categories already loading or loaded.
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) productController.getCategoryProductsDebounced(categoryId, searchProduct: _activeSearchQuery);
+          });
+        }
+
         return RefreshIndicator(
           onRefresh: () async {
             final productController = Provider.of<ProductController>(context, listen: false);

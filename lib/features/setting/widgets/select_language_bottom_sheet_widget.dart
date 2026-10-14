@@ -95,6 +95,9 @@ class _SelectLanguageBottomSheetWidgetState extends State<SelectLanguageBottomSh
                     Provider.of<FlashDealController>(context, listen: false).getFlashDealList(true, true);
                     productController.getRecommendedProduct();
                     productController.getJustForYouProduct(1);
+                    // Per-category rows/tabs and clearance sale are cached too; reload them in the new language.
+                    productController.clearCategoryProductCache();
+                    productController.getClearanceAllProductList(1);
 
                     if(splashController.configModel?.activeTheme == "theme_fashion") {
                       productController.getMostSearchingProduct(1);

@@ -131,6 +131,12 @@ class CartModel {
       shippingType = json['shipping_type'];
     }
     productInfo = json['product'] != null ? ProductInfo.fromJson(json['product']) : null;
+    // The cart row stores a snapshot of the name from when the item was added; the nested
+    // product name is translated for the current `lang` header, so prefer it.
+    final dynamic translatedName = json['product'] is Map ? json['product']['name'] : null;
+    if (translatedName is String && translatedName.isNotEmpty) {
+      name = translatedName;
+    }
     productType = json['product_type'];
     slug = json['slug'];
     if(json['minimum_order_amount_info'] != null){
