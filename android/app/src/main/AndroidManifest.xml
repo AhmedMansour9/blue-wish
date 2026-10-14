@@ -82,8 +82,8 @@
 
                 <data android:scheme="https"/>
                 <data android:scheme="http"/>
-                <data android:host="blue-wiish.com"/>
-                <data android:host="www.blue-wiish.com"/>
+                <data android:host="blue-wish.com"/>
+                <data android:host="www.blue-wish.com"/>
 
                 <data android:pathPattern="/" />
                 <data android:pathPattern="" />
