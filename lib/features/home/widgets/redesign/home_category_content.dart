@@ -134,17 +134,17 @@ class _CategoryContentBodyState extends State<_CategoryContentBody> with Automat
                     },
                     itemView: LayoutBuilder(builder: (context, constraints) {
                       final int crossAxisCount = ResponsiveHelper.isTab(context) ? 3 : 2;
-                      // Fixed cell height (tallest card variant) so every card in the grid is the same height.
-                      final double cardWidth = (constraints.maxWidth - Dimensions.paddingSizeEight * 2) / crossAxisCount - Dimensions.paddingSizeExtraSmall * 2;
+                      // Same card size as the category products screen (brand_and_category_product_screen.dart).
+                      final double cardWidth = (constraints.maxWidth - Dimensions.paddingSizeDefault * 2) / crossAxisCount - Dimensions.paddingSizeExtraSmall * 2;
                       return GridView.builder(
                         key: PageStorageKey(widget.categoryIndex),
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeEight)
+                        padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault)
                             .copyWith(bottom: MediaQuery.of(context).padding.bottom),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: crossAxisCount,
-                          mainAxisExtent: ProductCardWidget.maxHeightFor(context, cardWidth) + Dimensions.paddingSizeExtraSmall * 2,
+                          mainAxisExtent: ProductCardWidget.maxHeightFor(context, cardWidth) + Dimensions.paddingSizeExtraSmall * 2 - 14,
                         ),
                         itemCount: products.length,
                         itemBuilder: (context, index) {
