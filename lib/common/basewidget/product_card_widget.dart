@@ -192,29 +192,37 @@ class ProductCardWidget extends StatelessWidget {
                       const SizedBox(height: Dimensions.paddingSizeExtraExtraSmall),
                     ],
 
-                    Text(productPrice,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: titilliumBold.copyWith(
-                        fontSize: Dimensions.fontSizeSmall,
-                        color: Theme.of(context).textTheme.bodyLarge?.color,
-                      ),
-                    ),
-                    const SizedBox(height: Dimensions.paddingSizeExtraExtraSmall),
-
-
-                    if (hasDiscount && originalPrice != null)
-                      Text(
-                        originalPrice,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: titilliumRegular.copyWith(
-                          fontSize: Dimensions.fontSizeSmall,
-                          color: Theme.of(context).hintColor,
-                          decoration: TextDecoration.lineThrough,
-                          decorationColor: Theme.of(context).hintColor,
+                    // Original (struck-through) price sits next to the price so a discount
+                    // doesn't add a line to the card.
+                    Row(crossAxisAlignment: CrossAxisAlignment.baseline, textBaseline: TextBaseline.alphabetic, children: [
+                      Flexible(
+                        child: Text(productPrice,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: titilliumBold.copyWith(
+                            fontSize: Dimensions.fontSizeSmall,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                          ),
                         ),
                       ),
+
+                      if (hasDiscount && originalPrice != null) ...[
+                        const SizedBox(width: Dimensions.paddingSizeExtraSmall),
+                        Flexible(
+                          child: Text(
+                            originalPrice,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: titilliumRegular.copyWith(
+                              fontSize: Dimensions.fontSizeExtraSmall,
+                              color: Theme.of(context).hintColor,
+                              decoration: TextDecoration.lineThrough,
+                              decorationColor: Theme.of(context).hintColor,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ]),
                     if (fillHeight) const Spacer(),
                     if (!(product.currentStock == 0 && product.productType == 'physical')) ...[
                       const SizedBox(height: 10),
@@ -232,7 +240,7 @@ class ProductCardWidget extends StatelessWidget {
   static Widget _expandIf(bool expand, Widget child) => expand ? Expanded(child: child) : child;
 
   /// Height that fits the tallest variant of this card (two-line name, rating,
-  /// original price and add-to-cart button) at [width]. Use it as a fixed grid
+  /// price row and add-to-cart button) at [width]. Use it as a fixed grid
   /// cell height together with [fillHeight] so every card gets the same height.
   /// Keep in sync with the layout in [build].
   static double maxHeightFor(BuildContext context, double width) {
@@ -255,8 +263,7 @@ class ProductCardWidget extends StatelessWidget {
         + 10 // gap under the image
         + nameLine * 2 + Dimensions.paddingSizeExtraExtraSmall // name
         + (regular > Dimensions.iconSizeExtraSmall ? regular : Dimensions.iconSizeExtraSmall) + Dimensions.paddingSizeExtraExtraSmall // rating
-        + bold + Dimensions.paddingSizeExtraExtraSmall // price
-        + regular // original price
+        + bold // price row (original price sits beside it)
         + 10 + 30 // add-to-cart button
         + Dimensions.paddingSizeSmall // bottom padding
         + 4; // safety margin for font rounding

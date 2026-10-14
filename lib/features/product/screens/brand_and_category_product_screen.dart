@@ -303,7 +303,7 @@ class _BrandAndCategoryProductScreenState extends State<BrandAndCategoryProductS
                       padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault).copyWith(top: Dimensions.paddingSizeExtraSmall),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: crossAxisCount,
-                        mainAxisExtent: ProductCardWidget.maxHeightFor(context, cardWidth) + Dimensions.paddingSizeExtraSmall * 2 - 35,
+                        mainAxisExtent: ProductCardWidget.maxHeightFor(context, cardWidth) + Dimensions.paddingSizeExtraSmall * 2 - 14,
                       ),
                       itemCount: productController.brandOrCategoryProductList?.products?.length ?? 0,
                       itemBuilder: (BuildContext context, int index) {
