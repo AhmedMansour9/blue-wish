@@ -176,7 +176,26 @@ class AuthController with ChangeNotifier {
       return email;
     }
 
+    final String? tokenEmail = _emailFromAppleIdentityToken(credential.identityToken);
+    if (tokenEmail != null) {
+      await authServiceInterface.setAppleLoginEmail(tokenEmail);
+      return tokenEmail;
+    }
+
     return authServiceInterface.getAppleLoginEmail();
+  }
+
+  String? _emailFromAppleIdentityToken(String? identityToken) {
+    if (identityToken == null) return null;
+    try {
+      final List<String> parts = identityToken.split('.');
+      if (parts.length < 2) return null;
+      final Map<String, dynamic> claims = jsonDecode(utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))));
+      final String? email = claims['email'] as String?;
+      return (email != null && email.isNotEmpty) ? email : null;
+    } catch (_) {
+      return null;
+    }
   }
 
 
@@ -720,7 +739,7 @@ class AuthController with ChangeNotifier {
       responseModel = ResponseModel( 'verification', token != null);
     } else {
       _loginErrorMessage = ApiChecker.getError(apiResponse).errors![0].message;
-      showCustomSnackBarWidget(_verificationMsg, Get.context!, snackBarType: SnackBarType.error);
+      showCustomSnackBarWidget(_loginErrorMessage, Get.context!, snackBarType: SnackBarType.error);
       responseModel = ResponseModel(_loginErrorMessage, false);
     }
     _isPhoneNumberVerificationButtonLoading = false;

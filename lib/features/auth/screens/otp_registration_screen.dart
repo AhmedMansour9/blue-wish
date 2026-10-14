@@ -60,7 +60,8 @@ class _OtpRegistrationScreenState extends State<OtpRegistrationScreen> {
     final double width = MediaQuery.of(context).size.width;
     final Size size = MediaQuery.of(context).size;
 
-    bool isNumber = NumberCheckerHelper.isNumber(widget.userInput.trim().replaceAll('+', ''));
+    final String trimmedInput = widget.userInput.trim();
+    bool isNumber = trimmedInput.isNotEmpty && NumberCheckerHelper.isNumber(trimmedInput.replaceAll('+', ''));
     final configModel = Provider.of<SplashController>(context, listen: false).configModel!;
 
 
