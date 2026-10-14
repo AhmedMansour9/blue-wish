@@ -204,40 +204,16 @@ class ProductCardWidget extends StatelessWidget {
 
 
                     if (hasDiscount && originalPrice != null)
-                      Row(
-                        children: [
-                          Text(
-                            originalPrice,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: titilliumRegular.copyWith(
-                              fontSize: Dimensions.fontSizeSmall,
-                              color: Theme.of(context).hintColor,
-                              decoration: TextDecoration.lineThrough,
-                              decorationColor: Theme.of(context).hintColor,
-                            ),
-                          ),
-                          const SizedBox(width: Dimensions.paddingSizeExtraExtraSmall),
-
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.error.withValues(alpha: 0.1),
-                              border: Border.all(
-                                color: Theme.of(context).colorScheme.error.withValues(alpha: 0.5),
-                                width: 1.5,
-                              ),
-                              borderRadius:
-                              BorderRadius.circular(Dimensions.radiusSmall),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeExtraSmall - 2),
-                            child: Text('-${discountType == 'percent' || discountType == 'percentage' ? '${discount.toStringAsFixed(0)}%' : PriceConverter.convertPriceWithoutSymbol(context, discount)}',
-                              style: titilliumBold.copyWith(
-                                color: Theme.of(context).colorScheme.error,
-                                fontSize: Dimensions.fontSizeExtraSmall,
-                              ),
-                            ),
-                          ),
-                        ],
+                      Text(
+                        originalPrice,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: titilliumRegular.copyWith(
+                          fontSize: Dimensions.fontSizeSmall,
+                          color: Theme.of(context).hintColor,
+                          decoration: TextDecoration.lineThrough,
+                          decorationColor: Theme.of(context).hintColor,
+                        ),
                       ),
                     if (fillHeight) const Spacer(),
                     if (!(product.currentStock == 0 && product.productType == 'physical')) ...[
@@ -254,4 +230,35 @@ class ProductCardWidget extends StatelessWidget {
   }
 
   static Widget _expandIf(bool expand, Widget child) => expand ? Expanded(child: child) : child;
+
+  /// Height that fits the tallest variant of this card (two-line name, rating,
+  /// original price and add-to-cart button) at [width]. Use it as a fixed grid
+  /// cell height together with [fillHeight] so every card gets the same height.
+  /// Keep in sync with the layout in [build].
+  static double maxHeightFor(BuildContext context, double width) {
+    final TextScaler scaler = MediaQuery.textScalerOf(context);
+    double lineHeight(TextStyle style) {
+      final TextPainter painter = TextPainter(
+        text: TextSpan(text: 'Agأب', style: style),
+        textDirection: TextDirection.ltr,
+        textScaler: scaler,
+        maxLines: 1,
+      )..layout();
+      return painter.height;
+    }
+
+    final double regular = lineHeight(titilliumRegular.copyWith(fontSize: Dimensions.fontSizeSmall));
+    final double bold = lineHeight(titilliumBold.copyWith(fontSize: Dimensions.fontSizeSmall));
+    final double nameLine = lineHeight(titilliumRegular.copyWith(fontSize: Dimensions.fontSizeSmall, height: 1.35));
+
+    return width / 1.15 // image (AspectRatio 1.15)
+        + 10 // gap under the image
+        + nameLine * 2 + Dimensions.paddingSizeExtraExtraSmall // name
+        + (regular > Dimensions.iconSizeExtraSmall ? regular : Dimensions.iconSizeExtraSmall) + Dimensions.paddingSizeExtraExtraSmall // rating
+        + bold + Dimensions.paddingSizeExtraExtraSmall // price
+        + regular // original price
+        + 10 + 30 // add-to-cart button
+        + Dimensions.paddingSizeSmall // bottom padding
+        + 4; // safety margin for font rounding
+  }
 }

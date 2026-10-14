@@ -198,38 +198,13 @@ class TodaysDealCard extends StatelessWidget {
                             ),
                           ),
                           if (hasDiscount && originalPrice != null)
-                            Row(
-                              children: [
-                                Text('\$$originalPrice',
-                                  style: titilliumRegular.copyWith(
-                                    fontSize: Dimensions.fontSizeExtraSmall,
-                                    color: Theme.of(context).hintColor,
-                                    decoration: TextDecoration.lineThrough,
-                                    decorationColor: Theme.of(context).hintColor,
-                                  ),
-                                ),
-                                const SizedBox(width: Dimensions.paddingSizeExtraSmall),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: Dimensions.paddingSizeExtraSmall,
-                                    vertical: Dimensions.paddingSizeExtraExtraSmall,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).colorScheme.error.withValues(alpha: .1),
-                                    border: Border.all(
-                                      color: Theme.of(context).colorScheme.error.withValues(alpha: .5),
-                                      width: 1.5,
-                                    ),
-                                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
-                                  ),
-                                  child: Text('-${discountType == 'percent' || discountType == 'percentage' ? '${discount.toStringAsFixed(0)}%' : PriceConverter.convertPriceWithoutSymbol(context, discount)}',
-                                    style: titilliumBold.copyWith(
-                                      fontSize: Dimensions.fontSizeExtraSmall,
-                                      color: Theme.of(context).colorScheme.error,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            Text('\$$originalPrice',
+                              style: titilliumRegular.copyWith(
+                                fontSize: Dimensions.fontSizeExtraSmall,
+                                color: Theme.of(context).hintColor,
+                                decoration: TextDecoration.lineThrough,
+                                decorationColor: Theme.of(context).hintColor,
+                              ),
                             ),
                         ],
                       ),

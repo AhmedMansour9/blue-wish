@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/product_card_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/features/category/controllers/category_controller.dart';
@@ -31,19 +30,63 @@ class CategoryProductsSections extends StatelessWidget {
   }
 }
 
-class _CategoryProductsSection extends StatelessWidget {
+class _CategoryProductsSection extends StatefulWidget {
   final CategoryModel category;
   const _CategoryProductsSection({super.key, required this.category});
 
-  static const int _maxItems = 10;
+  @override
+  State<_CategoryProductsSection> createState() => _CategoryProductsSectionState();
+}
+
+class _CategoryProductsSectionState extends State<_CategoryProductsSection> {
+  final ScrollController _scrollController = ScrollController();
+  bool _isLoadingMore = false;
+
+  int get _categoryId => widget.category.id!;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  // Load the next page when the row is scrolled close to its end.
+  void _onScroll() {
+    if (_isLoadingMore || !_scrollController.hasClients) return;
+    final position = _scrollController.position;
+    if (position.pixels < position.maxScrollExtent - 200) return;
+
+    final productController = Provider.of<ProductController>(context, listen: false);
+    final ProductModel? model = productController.categoryProductsFor(_categoryId);
+    final int loaded = model?.products?.length ?? 0;
+    if (model == null || loaded >= (model.totalSize ?? 0)) return;
+
+    setState(() => _isLoadingMore = true);
+    productController.getCategoryProducts(_categoryId, (model.offset ?? 1) + 1).whenComplete(() {
+      if (mounted) setState(() => _isLoadingMore = false);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final int categoryId = category.id!;
+    final CategoryModel category = widget.category;
+    final int categoryId = _categoryId;
 
-    return Selector<ProductController, ProductModel?>(
-      selector: (_, controller) => controller.categoryProductsFor(categoryId),
-      builder: (context, productModel, __) {
+    // Load-more appends to the same ProductModel instance, so select the length too
+    // or the Selector would not rebuild when a new page arrives.
+    return Selector<ProductController, (ProductModel?, int)>(
+      selector: (_, controller) {
+        final model = controller.categoryProductsFor(categoryId);
+        return (model, model?.products?.length ?? 0);
+      },
+      builder: (context, selected, __) {
+        final ProductModel? productModel = selected.$1;
         if (productModel == null) {
           // Not loaded yet (or the cache was cleared on pull-to-refresh) — fetch once;
           // getCategoryProducts ignores repeat calls while a request is in flight.
@@ -78,13 +121,19 @@ class _CategoryProductsSection extends StatelessWidget {
             // All cards in the row share the tallest card's height; the card pins its
             // add-to-cart button to the bottom so the extra space sits above the button.
             SingleChildScrollView(
+              controller: _scrollController,
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.only(left: Dimensions.homePagePadding, right: 15),
               child: IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                for (int index = 0; index < min(products!.length, _maxItems); index++) ...[
+                for (int index = 0; index < products!.length; index++) ...[
                   if (index > 0) const SizedBox(width: Dimensions.paddingSizeSmall),
                   SizedBox(width: 150, child: ProductCardWidget(product: products[index], fillHeight: true)),
                 ],
+                if (_isLoadingMore)
+                  const SizedBox(
+                    width: 60,
+                    child: Center(child: SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2))),
+                  ),
               ])),
             ),
           const SizedBox(height: Dimensions.homePagePadding),

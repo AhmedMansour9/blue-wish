@@ -12,7 +12,6 @@ import 'package:flutter_sixvalley_ecommerce/localization/language_constrants.dar
 import 'package:flutter_sixvalley_ecommerce/main.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/custom_themes.dart';
 import 'package:flutter_sixvalley_ecommerce/utill/dimensions.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 
 class HomeCategoryContent extends StatelessWidget {
@@ -125,22 +124,29 @@ class _CategoryContentBodyState extends State<_CategoryContentBody> with Automat
                     onPaginate: (offset) {
                       Provider.of<ProductController>(context, listen: false).getCategoryProducts(categoryId, offset ?? 1, searchProduct: _activeSearchQuery);
                     },
-                    itemView: MasonryGridView.count(
-                      cacheExtent: 600,
-                      key: PageStorageKey(widget.categoryIndex),
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeEight)
-                          .copyWith(bottom: MediaQuery.of(context).padding.bottom),
-                      crossAxisCount: ResponsiveHelper.isTab(context) ? 3 : 2,
-                      itemCount: products.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                          child: ProductCardWidget(product: products[index]),
-                        );
-                      },
-                    ),
+                    itemView: LayoutBuilder(builder: (context, constraints) {
+                      final int crossAxisCount = ResponsiveHelper.isTab(context) ? 3 : 2;
+                      // Fixed cell height (tallest card variant) so every card in the grid is the same height.
+                      final double cardWidth = (constraints.maxWidth - Dimensions.paddingSizeEight * 2) / crossAxisCount - Dimensions.paddingSizeExtraSmall * 2;
+                      return GridView.builder(
+                        key: PageStorageKey(widget.categoryIndex),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeEight)
+                            .copyWith(bottom: MediaQuery.of(context).padding.bottom),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          mainAxisExtent: ProductCardWidget.maxHeightFor(context, cardWidth) + Dimensions.paddingSizeExtraSmall * 2,
+                        ),
+                        itemCount: products.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                            child: ProductCardWidget(product: products[index], fillHeight: true),
+                          );
+                        },
+                      );
+                    }),
                   ),
                 ),
             ],

@@ -13,7 +13,6 @@ import 'package:flutter_sixvalley_ecommerce/utill/images.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/custom_app_bar_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/no_internet_screen_widget.dart';
 import 'package:flutter_sixvalley_ecommerce/common/basewidget/product_shimmer_widget.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 
 class BrandAndCategoryProductScreen extends StatefulWidget {
@@ -295,18 +294,26 @@ class _BrandAndCategoryProductScreenState extends State<BrandAndCategoryProductS
                 totalSize: productController.brandOrCategoryProductList?.totalSize,
                 offset: productController.brandOrCategoryProductList?.offset,
                 itemView :  Expanded(
-                  child: MasonryGridView.count(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault).copyWith(top: Dimensions.paddingSizeExtraSmall),
-                    crossAxisCount: MediaQuery.of(context).size.width> 480 ? 3 : 2,
-                    itemCount: productController.brandOrCategoryProductList?.products?.length ?? 0,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
-                        child: ProductCardWidget(product: productController.brandOrCategoryProductList!.products![index]),
-                      );
-                    },
-                  ),
+                  child: LayoutBuilder(builder: (context, constraints) {
+                    final int crossAxisCount = MediaQuery.of(context).size.width> 480 ? 3 : 2;
+                    // Fixed cell height (tallest card variant) so every card in the grid is the same height.
+                    final double cardWidth = (constraints.maxWidth - Dimensions.paddingSizeDefault * 2) / crossAxisCount - Dimensions.paddingSizeExtraSmall * 2;
+                    return GridView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSizeDefault).copyWith(top: Dimensions.paddingSizeExtraSmall),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        mainAxisExtent: ProductCardWidget.maxHeightFor(context, cardWidth) + Dimensions.paddingSizeExtraSmall * 2 - 35,
+                      ),
+                      itemCount: productController.brandOrCategoryProductList?.products?.length ?? 0,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(Dimensions.paddingSizeExtraSmall),
+                          child: ProductCardWidget(product: productController.brandOrCategoryProductList!.products![index], fillHeight: true),
+                        );
+                      },
+                    );
+                  }),
                 ),
               ),
             )) : productController.brandOrCategoryProductList == null ?
