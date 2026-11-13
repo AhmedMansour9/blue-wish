@@ -44,6 +44,8 @@ class CheckoutController with ChangeNotifier {
 
   ReferralAmount? _referralAmount;
   ReferralAmount? get referralAmount => _referralAmount;
+  double _comboOfferDiscount = 0;
+  double get comboOfferDiscount => _comboOfferDiscount;
 
   String selectedPaymentName = '';
   void setSelectedPayment(String payment){
@@ -350,6 +352,16 @@ class CheckoutController with ChangeNotifier {
     }
     notifyListeners();
     return apiResponse;
+  }
+
+
+  Future<void> getComboOfferDiscount() async {
+    _comboOfferDiscount = 0;
+    ApiResponseModel apiResponse = await checkoutServiceInterface.getComboOfferDiscount();
+    if (apiResponse.response != null && apiResponse.response!.statusCode == 200) {
+      _comboOfferDiscount = double.tryParse('${apiResponse.response!.data['amount']}') ?? 0;
+    }
+    notifyListeners();
   }
 
 

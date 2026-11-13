@@ -23,4 +23,6 @@ abstract class CheckoutServiceInterface{
 
   Future<dynamic> getReferralAmount(String? amount);
 
+  Future<dynamic> getComboOfferDiscount();
+
 }

@@ -57,4 +57,9 @@ class CheckoutService implements CheckoutServiceInterface{
   Future getReferralAmount(String? amount) async {
     return await checkoutRepositoryInterface.getReferralAmount(amount);
   }
+
+  @override
+  Future getComboOfferDiscount() async {
+    return await checkoutRepositoryInterface.getComboOfferDiscount();
+  }
 }

@@ -25,5 +25,7 @@ abstract class CheckoutRepositoryInterface implements RepositoryInterface{
 
   Future<dynamic> getReferralAmount(String? amount);
 
+  Future<dynamic> getComboOfferDiscount();
+
 
 }

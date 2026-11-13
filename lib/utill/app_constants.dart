@@ -170,6 +170,7 @@ import 'package:flutter_sixvalley_ecommerce/common/enums/local_caches_type_enum.
   static const String verifyTokenUri = '/api/v1/auth/verify-token';
   static const String existingAccountCheck = '/api/v1/auth/existing-account-check';
   static const String referralAmountUri = '/api/v1/cart/get-referral-discount-redeem';
+  static const String comboOfferDiscountUri = '/api/v1/cart/category-combo-discount';
 
   static const String duePaymentByCodUri = '/api/v1/edit-order/due-payment-by-cod';
   static const String duePaymentByDigitalPayment = '/api/v1/edit-order/due-payment-by-digital-payment';

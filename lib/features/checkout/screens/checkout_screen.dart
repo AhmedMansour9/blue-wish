@@ -65,6 +65,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
   late bool _billingAddress;
   double? _couponDiscount;
   double? _referralDiscount;
+  double _comboOfferDiscount = 0;
 
   DebounceHelper debounceHelper = DebounceHelper(milliseconds: 500);
   SplashController  splashController= Provider.of<SplashController>(Get.context!, listen: false);
@@ -82,6 +83,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
       }
     });
     Provider.of<CheckoutController>(context, listen: false).getReferralAmount('0');
+    Provider.of<CheckoutController>(context, listen: false).getComboOfferDiscount();
     Provider.of<CouponController>(context, listen: false).removePrevCouponData();
     Provider.of<CartController>(context, listen: false).getCartData(context);
     Provider.of<CheckoutController>(context, listen: false).resetPaymentMethod();
@@ -200,16 +202,16 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                       }
 
                                       else if(orderProvider.isOfflineChecked){
-                                        // Navigator.of(context).push(MaterialPageRoute(builder: (_)=> OfflinePaymentScreen(payableAmount: _order + widget.shippingFee - widget.discount - (_referralDiscount ?? 0) - _couponDiscount! + _tax, callback: _callback)));
-                                        RouterHelper.getOfflinePaymentScreen(payableAmount: (_order + widget.shippingFee - widget.discount - (_referralDiscount ?? 0) - _couponDiscount! + _tax), callback: _callback);
+                                        // Navigator.of(context).push(MaterialPageRoute(builder: (_)=> OfflinePaymentScreen(payableAmount: _order + widget.shippingFee - widget.discount - (_referralDiscount ?? 0) - _comboOfferDiscount - _couponDiscount! + _tax, callback: _callback)));
+                                        RouterHelper.getOfflinePaymentScreen(payableAmount: (_order + widget.shippingFee - widget.discount - (_referralDiscount ?? 0) - _comboOfferDiscount - _couponDiscount! + _tax), callback: _callback);
                                       }
 
                                       else if(orderProvider.isWalletChecked) {
                                         showAnimatedDialog(context, WalletPaymentWidget(
                                           currentBalance: profileProvider.balance ?? 0,
-                                          orderAmount: _order + widget.shippingFee - widget.discount - (_referralDiscount ?? 0) - _couponDiscount! + _tax,
+                                          orderAmount: _order + widget.shippingFee - widget.discount - (_referralDiscount ?? 0) - _comboOfferDiscount - _couponDiscount! + _tax,
                                           onTap: (){if(profileProvider.balance! <
-                                              (_order + widget.shippingFee - widget.discount - (_referralDiscount ?? 0) - _couponDiscount! + _tax)) {
+                                              (_order + widget.shippingFee - widget.discount - (_referralDiscount ?? 0) - _comboOfferDiscount - _couponDiscount! + _tax)) {
                                             showCustomSnackBarWidget(getTranslated('insufficient_balance', context), context, snackBarType: SnackBarType.warning);
                                           }else{
                                             Navigator.pop(context);
@@ -318,6 +320,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                             builder: (context, checkoutController, child) {
                               _couponDiscount = Provider.of<CouponController>(context).discount ?? 0;
                               _referralDiscount = Provider.of<CheckoutController>(context).referralAmount?.amount ?? 0;
+                              _comboOfferDiscount = checkoutController.comboOfferDiscount;
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -349,6 +352,12 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                     amount: PriceConverter.convertPrice(context, _tax),
                                   ),
 
+                                  if (_comboOfferDiscount > 0)
+                                  AmountWidget(
+                                    title: getTranslated('combo_offer_discount', context),
+                                    amount: PriceConverter.convertPrice(context, _comboOfferDiscount),
+                                  ),
+
                                   if ((_referralDiscount ?? 0) > 0)
                                   AmountWidget(
                                     title: getTranslated('referral_discount', context),
@@ -360,7 +369,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
                                     fontSize: Dimensions.fontSizeLarge, isTitleBlack: true,
                                     title: '${getTranslated('total_payable', context)} ${Provider.of<SplashController>(Get.context!, listen: false).configModel?.systemTaxIncludeStatus == 1 ? getTranslated('inc_vat_tax', context) : ''} ',
                                     amount: PriceConverter.convertPrice(context,
-                                      (_order + widget.shippingFee - (_referralDiscount ?? 0) - widget.discount - _couponDiscount! + _tax),
+                                      (_order + widget.shippingFee - (_referralDiscount ?? 0) - _comboOfferDiscount - widget.discount - _couponDiscount! + _tax),
                                     ),
                                   ),
 

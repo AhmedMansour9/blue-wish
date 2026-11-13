@@ -173,6 +173,16 @@ class CheckoutRepository implements CheckoutRepositoryInterface{
 
 
   @override
+  Future<ApiResponseModel> getComboOfferDiscount() async {
+    try {
+      final response = await dioClient!.get(AppConstants.comboOfferDiscountUri);
+      return ApiResponseModel.withSuccess(response);
+    } catch (e) {
+      return ApiResponseModel.withError(ApiErrorHandler.getMessage(e));
+    }
+  }
+
+  @override
   Future add(value) {
     // TODO: implement add
     throw UnimplementedError();
